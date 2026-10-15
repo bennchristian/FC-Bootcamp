@@ -1,0 +1,9 @@
+# Bootcamp course materials: local input for BMAD only, never pushed (this repo is public)
+docs/bootcamp/
+
+# Secrets and per-machine state
+.env*
+.vercel
+
+# macOS
+.DS_Store
