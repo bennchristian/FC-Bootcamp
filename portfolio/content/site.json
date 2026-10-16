@@ -88,19 +88,14 @@
         "note": "Picked Cadgy for the clone. It had nothing for users to create, so I turned it into players submitting puzzles, with me as editor of the dailies."
       },
       {
-        "date": "Oct 16",
+        "date": "",
         "topic": "The prompt, commit, deploy loop",
         "note": "create-next-app took six minutes, almost all of it npm install. Now I start installs in the background and do the dashboard steps while they run."
       },
       {
-        "date": "Oct 16",
+        "date": "",
         "topic": "Row-level security",
         "note": "Every Supabase table gets RLS and an explicit policy in the same change that creates it, so a second account can't touch what the first one made."
-      },
-      {
-        "date": "Oct 16",
-        "topic": "AI is not a dictionary",
-        "note": "Asked for the 20 most common words in a grid, Gemini slipped in CRONT, which isn't a word, and wrote it a convincing definition. A person still checks the list."
       }
     ]
   },
