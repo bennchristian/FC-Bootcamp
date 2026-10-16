@@ -6,6 +6,8 @@ import { type Columns, type PuzzleWord, POINTS_PER_WORD, findPath, formatSeconds
 import { createClient } from "@/lib/supabase/client";
 
 const WIN_SECONDS = 180;
+const MAX_LAYERS = 6; // 3D stacks taller than this show a count instead
+const LAYER_PX = 4;
 
 // Only called from event handlers and timers, never while rendering.
 const clock = () => Date.now();
@@ -36,6 +38,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const [startedAt, setStartedAt] = useState<number | null>(saved?.startedAt ?? null);
   const [finishedAt, setFinishedAt] = useState<number | null>(saved?.finishedAt ?? null);
   const [now, setNow] = useState<number | null>(null);
+  const [threeD, setThreeD] = useState(false);
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
   const saving = useRef(Promise.resolve());
@@ -43,7 +46,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const answers = useMemo(() => new Set(words.map((w) => w.word)), [words]);
   const allFound = words.length > 0 && found.length === words.length;
 
-  // Which words use each tile, keyed "column-row". A tile turns gold once all of them are found.
+  // Which words use each tile, keyed "column-row".
   const wordsByTile = useMemo(() => {
     const map = new Map<string, string[]>();
     for (const { word } of words) {
@@ -72,6 +75,19 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   }, [allFound]);
 
   const end = finishedAt ?? now;
+  // How many unfound words still use each tile. At 0 the tile turns gold; in 3D it's the stack height.
+  const remainingByTile = useMemo(() => {
+    const map = new Map<string, number>();
+    columns.forEach((column, col) =>
+      column.forEach((_, row) => {
+        const key = `${col}-${row}`;
+        map.set(key, (wordsByTile.get(key) ?? []).filter((w) => !found.includes(w)).length);
+      }),
+    );
+    return map;
+  }, [columns, wordsByTile, found]);
+  const tallest = Math.min(MAX_LAYERS, Math.max(0, ...remainingByTile.values()));
+
   const elapsed = startedAt && end ? Math.max(0, Math.floor((end - startedAt) / 1000)) : 0;
 
   // Saves the whole play each time. Saves run one after another so an older one can't land last.
@@ -161,26 +177,55 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
         <span className="rounded-full border border-neutral-600 px-3 py-1 tabular-nums">
           ⏱ {formatSeconds(elapsed)}
         </span>
+        <button
+          type="button"
+          onClick={() => setThreeD(!threeD)}
+          aria-pressed={threeD}
+          title="Stack each tile by how many unfound words still use it"
+          className={`rounded-full border px-3 py-1 ${
+            threeD ? "border-amber-400 bg-amber-400 text-neutral-900" : "border-neutral-600"
+          }`}
+        >
+          3D
+        </button>
       </div>
 
       <div className="flex gap-2">
         {columns.map((column, col) => (
-          <div key={col} className="flex flex-col gap-2">
+          <div
+            key={col}
+            className="flex flex-col transition-[gap]"
+            style={{ gap: 8 + (threeD ? tallest * LAYER_PX : 0) }}
+          >
             {column.map((tile, row) => {
-              const tileWords = wordsByTile.get(`${col}-${row}`) ?? [];
-              const gold = tileWords.length > 0 && tileWords.every((w) => found.includes(w));
+              const remaining = remainingByTile.get(`${col}-${row}`) ?? 0;
+              const layers = threeD ? Math.min(remaining, MAX_LAYERS) : 0;
               const picked = picks[col] === row;
               return (
                 <button
                   key={row}
                   type="button"
                   onClick={() => pickTile(col, row)}
-                  style={{ width: `min(3.5rem, calc((100vw - 3rem) / ${columns.length} - 0.5rem))` }}
-                  className={`aspect-square rounded-md text-lg font-bold text-neutral-900 shadow transition ${
-                    gold ? "bg-amber-400" : "bg-[#f1dcae]"
+                  aria-label={`${tile || "blank"}, used by ${remaining} more ${remaining === 1 ? "word" : "words"}`}
+                  style={{
+                    width: `min(3.5rem, calc((100vw - 3rem) / ${columns.length} - 0.5rem))`,
+                    boxShadow: layers
+                      ? Array.from(
+                          { length: layers },
+                          (_, i) => `0 ${(i + 1) * LAYER_PX}px 0 ${i % 2 ? "#e2c793" : "#b98f4f"}`,
+                        ).join(", ")
+                      : undefined,
+                  }}
+                  className={`relative aspect-square rounded-md text-lg font-bold text-neutral-900 shadow transition ${
+                    remaining === 0 ? "bg-amber-400" : "bg-[#f1dcae]"
                   } ${picked ? "ring-4 ring-sky-400" : ""}`}
                 >
                   {tile === "" ? "❤️" : tile}
+                  {threeD && remaining > MAX_LAYERS && (
+                    <span className="absolute top-0.5 right-1 text-[10px] font-semibold">
+                      {remaining}
+                    </span>
+                  )}
                 </button>
               );
             })}
