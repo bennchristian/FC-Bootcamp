@@ -29,3 +29,5 @@ Raw material for the **one** reflection video at the end of the bootcamp. Add a 
 <!-- Newest at the bottom. Format: YYYY-MM-DD HH:MM · week · note -->
 
 - 2026-10-15 14:00 · setup · Started the accelerated run. Scaffolded the planning docs and installed BMAD before writing any code.
+- 2026-10-16 12:10 · W3 · Picked Cadgy (OneLook's daily word-tile game) for the clone. It has nothing users create, so the create form became "players submit puzzles" with me as editor of the dailies. The hard part, finding every word a grid can make with a dictionary, is faked: creators type the word list by hand.
+- 2026-10-16 12:30 · W3 · `create-next-app` took 6 minutes, almost all of it `npm install`. Lesson for a tight schedule: start installs in the background and do the dashboard steps in parallel.
