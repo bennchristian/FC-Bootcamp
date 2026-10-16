@@ -1,23 +1,42 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { type Columns, type PuzzleWord, POINTS_PER_WORD, findPath } from "@/lib/grid";
+import { createClient } from "@/lib/supabase/client";
 
 const WIN_SECONDS = 180;
 
-type Props = {
-  columns: Columns;
-  words: PuzzleWord[];
+// Only called from event handlers and timers, never while rendering.
+const clock = () => Date.now();
+
+// Timestamps are milliseconds since 1970.
+export type SavedPlay = {
+  found: string[];
+  invalidCount: number;
+  startedAt: number;
+  finishedAt: number | null;
 };
 
-export default function Board({ columns, words }: Props) {
+type Props = {
+  puzzleId: string;
+  userId: string;
+  columns: Columns;
+  words: PuzzleWord[];
+  saved: SavedPlay | null;
+};
+
+export default function Board({ puzzleId, userId, columns, words, saved }: Props) {
   const [picks, setPicks] = useState<(number | null)[]>(() => columns.map(() => null));
   const [typed, setTyped] = useState("");
-  const [found, setFound] = useState<string[]>([]);
-  const [invalidCount, setInvalidCount] = useState(0);
+  const [found, setFound] = useState<string[]>(saved?.found ?? []);
+  const [invalidCount, setInvalidCount] = useState(saved?.invalidCount ?? 0);
   const [message, setMessage] = useState("");
-  const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [saveError, setSaveError] = useState("");
+  const [startedAt, setStartedAt] = useState<number | null>(saved?.startedAt ?? null);
+  const [finishedAt, setFinishedAt] = useState<number | null>(saved?.finishedAt ?? null);
   const [now, setNow] = useState<number | null>(null);
+  const supabase = useMemo(() => createClient(), []);
+  const saving = useRef(Promise.resolve());
 
   const answers = useMemo(() => new Set(words.map((w) => w.word)), [words]);
   const allFound = words.length > 0 && found.length === words.length;
@@ -50,7 +69,27 @@ export default function Board({ columns, words }: Props) {
     };
   }, [allFound]);
 
-  const elapsed = startedAt && now ? Math.floor((now - startedAt) / 1000) : 0;
+  const end = finishedAt ?? now;
+  const elapsed = startedAt && end ? Math.max(0, Math.floor((end - startedAt) / 1000)) : 0;
+
+  // Saves the whole play each time. Saves run one after another so an older one can't land last.
+  function save(next: { found: string[]; invalidCount: number; finishedAt: number | null }) {
+    const started = new Date(startedAt ?? clock()).toISOString();
+    saving.current = saving.current.then(async () => {
+      const { error } = await supabase.from("plays").upsert(
+        {
+          user_id: userId,
+          puzzle_id: puzzleId,
+          found: next.found,
+          invalid_count: next.invalidCount,
+          started_at: started,
+          finished_at: next.finishedAt ? new Date(next.finishedAt).toISOString() : null,
+        },
+        { onConflict: "user_id,puzzle_id" },
+      );
+      setSaveError(error ? "Couldn't save your progress. Check your connection." : "");
+    });
+  }
 
   function submit(guess: string) {
     const word = guess.toUpperCase();
@@ -58,11 +97,16 @@ export default function Board({ columns, words }: Props) {
     if (found.includes(word)) {
       setMessage(`You already found ${word}.`);
     } else if (answers.has(word)) {
-      setFound([...found, word]);
+      const nextFound = [...found, word];
+      const nextFinished = nextFound.length === words.length ? clock() : null;
+      setFound(nextFound);
+      setFinishedAt(nextFinished);
       setMessage(`${word}: +${POINTS_PER_WORD}`);
+      save({ found: nextFound, invalidCount, finishedAt: nextFinished });
     } else {
       setInvalidCount(invalidCount + 1);
       setMessage(`${word} isn't on this puzzle's list.`);
+      save({ found, invalidCount: invalidCount + 1, finishedAt });
     }
     setPicks(columns.map(() => null));
     setTyped("");
@@ -146,6 +190,11 @@ export default function Board({ columns, words }: Props) {
         <p className="text-sm text-neutral-400" aria-live="polite">
           {message || "Tap one tile per column, or type a word and press Enter."}
         </p>
+        {saveError && (
+          <p className="text-sm text-red-400" aria-live="polite">
+            {saveError}
+          </p>
+        )}
       </div>
 
       {allFound && (
