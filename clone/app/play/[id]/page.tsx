@@ -72,7 +72,12 @@ async function PuzzleLoader({ params }: { params: Promise<{ id: string }> }) {
         }
       />
       <Suspense fallback={<p className="text-sm text-neutral-500">Loading leaderboard…</p>}>
-        <Leaderboard puzzleId={puzzle.id} totalWords={words?.length ?? 0} playerId={player.id} />
+        <Leaderboard
+          puzzleId={puzzle.id}
+          totalWords={words?.length ?? 0}
+          playerId={player.id}
+          isGuest={player.isGuest}
+        />
       </Suspense>
     </>
   );

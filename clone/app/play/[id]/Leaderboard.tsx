@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { POINTS_PER_WORD, formatSeconds } from "@/lib/grid";
 import { createClient } from "@/lib/supabase/server";
 
@@ -5,6 +6,7 @@ type Props = {
   puzzleId: string;
   totalWords: number;
   playerId: string;
+  isGuest: boolean;
 };
 
 type Row = {
@@ -22,11 +24,13 @@ function median(values: number[]): number | null {
 }
 
 // Everyone's results on one puzzle, guests left out. Refreshes with the page, not live.
-export default async function Leaderboard({ puzzleId, totalWords, playerId }: Props) {
+export default async function Leaderboard({ puzzleId, totalWords, playerId, isGuest }: Props) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("plays")
-    .select("user_id, found, started_at, finished_at, profiles!inner(username, is_guest)")
+    .select(
+      "user_id, found, invalid_count, started_at, finished_at, profiles!inner(username, is_guest)",
+    )
     .eq("puzzle_id", puzzleId)
     .eq("profiles.is_guest", false);
 
@@ -35,6 +39,8 @@ export default async function Leaderboard({ puzzleId, totalWords, playerId }: Pr
   }
 
   const rows: Row[] = (data ?? [])
+    // A play starts on the first visit, but only players who've made a guess are ranked.
+    .filter((play) => play.found.length > 0 || play.invalid_count > 0)
     .map((play) => ({
       userId: play.user_id,
       username: (play.profiles as unknown as { username: string }).username,
@@ -55,8 +61,21 @@ export default async function Leaderboard({ puzzleId, totalWords, playerId }: Pr
   return (
     <section className="w-full rounded-lg border border-neutral-700 p-4">
       <h2 className="mb-2 font-semibold">Leaderboard</h2>
+      {isGuest && (
+        <p className="mb-2 text-sm text-neutral-400">
+          Guest games aren&apos;t ranked.{" "}
+          <Link href="/login" className="text-amber-400 underline hover:text-amber-300">
+            Sign up
+          </Link>{" "}
+          to get on the leaderboard.
+        </p>
+      )}
       {rows.length === 0 ? (
-        <p className="text-sm text-neutral-500">No one has played this grid yet. Be the first.</p>
+        <p className="text-sm text-neutral-500">
+          {isGuest
+            ? "No signed-up player has played this grid yet."
+            : "No one has played this grid yet. Be the first."}
+        </p>
       ) : (
         <>
           <p className="mb-3 text-sm text-neutral-400">

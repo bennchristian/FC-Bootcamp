@@ -74,6 +74,20 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
     };
   }, [allFound]);
 
+  // A first visit saves the start time, so refreshing before the first guess keeps the timer.
+  useEffect(() => {
+    if (saved) return;
+    const started = new Date().toISOString();
+    saving.current = saving.current.then(async () => {
+      await supabase
+        .from("plays")
+        .upsert(
+          { user_id: userId, puzzle_id: puzzleId, started_at: started },
+          { onConflict: "user_id,puzzle_id", ignoreDuplicates: true },
+        );
+    });
+  }, [saved, supabase, userId, puzzleId]);
+
   const end = finishedAt ?? now;
   // How many unfound words still use each tile. At 0 the tile turns gold; in 3D it's the stack height.
   const remainingByTile = useMemo(() => {
@@ -234,7 +248,9 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
       </div>
 
       <div className="flex min-h-10 flex-col items-center gap-1">
-        <p className="text-2xl font-bold tracking-[0.4em]">{current || "_ _ _ _ _"}</p>
+        <p className="text-2xl font-bold tracking-[0.4em]">
+          {current || columns.map(() => "_").join(" ")}
+        </p>
         <p className="text-sm text-neutral-400" aria-live="polite">
           {message || "Tap one tile per column, or type a word and press Enter."}
         </p>

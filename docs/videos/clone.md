@@ -101,11 +101,14 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 - [ ] On `/create`, press **✨ Generate puzzle** once. If it says "Gemini is busy", wait a minute and try again, so it works on camera.
 - [ ] Don't press **Create puzzle** on camera from your own account, or the puzzle goes up publicly under your name. From the guest window, it stays visible only to that guest.
 
-**Found while drafting (not fixed)**
+**Still to do (yours)**
 
-- **The guest demo is empty right now.** On the live site (checked 2026-10-16), the only daily is dated 2026-10-16, and there's no "Past dailies" section. `seed_guest()` only seeds dailies dated before today (`clone/supabase/migrations/0002_guest.sql:33`), so a guest gets no history, which breaks the "never empty" line in section 5. The smallest fix: as editor, make one or two dailies dated 2026-10-15 and 2026-10-14, then repeat the private-window test.
-- **The create form opens with an error.** A fresh form shows "Add at least one word." in red before you've typed anything. This is because `validatePuzzle` runs on the empty list (`clone/app/create/CreateForm.tsx:42`) and the result shows straight away (`clone/app/create/CreateForm.tsx:283`). It'll be on screen in section 4 until Generate finishes.
-- **The timer resets if you refresh before your first guess.** The start time is only saved with a guess (`clone/app/play/[id]/Board.tsx:95`), so the timer goes back to 0:00. That's short of PRD FR-17's "timer runs from the player's first visit".
-- **The leaderboard says nobody has played when a guest has.** Guests are left out on purpose (`clone/app/play/[id]/Leaderboard.tsx:31`), so a guest who's played still sees "No one has played this grid yet." (`clone/app/play/[id]/Leaderboard.tsx:59`). Justin will see this if he only uses the demo login.
-- **The README is missing a key.** `clone/README.md:12` lists only the two Supabase variables, but auto-fill and Generate also need `GEMINI_API_KEY` (`clone/lib/gemini.ts:17`).
-- **The board's placeholder is always five blanks** (`clone/app/play/[id]/Board.tsx:237`), even though grids can have 3–7 columns. It's cosmetic.
+- [ ] **Give the guest demo some history.** On the live site (checked 2026-10-16), the only daily is dated 2026-10-16, and there's no "Past dailies" section. `seed_guest()` only seeds dailies dated before today (`clone/supabase/migrations/0002_guest.sql:33`), so a guest gets no history, which breaks the "never empty" line in section 5. To fix it, sign in as yourself on `/create`, press **✨ Generate puzzle**, set **Daily date** to 2026-10-15, and press **Create puzzle**. Do it again for 2026-10-14, then repeat the private-window test.
+
+**Fixed on 2026-10-16** (the create form fix is pushed in `ff33f42`; the rest aren't committed yet)
+
+- The create form no longer opens with a red "Add at least one word." It shows that only once a word is typed (`clone/app/create/CreateForm.tsx`).
+- The timer keeps going if you refresh before your first guess. The first visit saves the start time (`clone/app/play/[id]/Board.tsx`), and the leaderboard leaves out visits with no guesses (`clone/app/play/[id]/Leaderboard.tsx`).
+- A guest now sees "Guest games aren't ranked. Sign up to get on the leaderboard." (`clone/app/play/[id]/Leaderboard.tsx`).
+- `clone/README.md` lists `GEMINI_API_KEY`.
+- The board's placeholder shows one blank per column (`clone/app/play/[id]/Board.tsx`).
