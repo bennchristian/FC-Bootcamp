@@ -29,6 +29,15 @@ export function findPath(columns: Columns, word: string): number[] | null {
   return walk(0, 0);
 }
 
+// Every distinct string of 3+ letters the grid can spell, one tile per column.
+export function buildableStrings(columns: Columns): string[] {
+  let strings = [""];
+  for (const column of columns) {
+    strings = strings.flatMap((prefix) => column.map((tile) => prefix + tile));
+  }
+  return [...new Set(strings)].filter((s) => s.length >= 3);
+}
+
 // 75 → "1:15"
 export function formatSeconds(total: number): string {
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;

@@ -8,10 +8,9 @@ export const MAX_ROWS = 6;
 const TILE = /^[A-Z]{0,3}$/;
 const WORD = /^[A-Z]+$/;
 
-// Checks a puzzle before it's saved. Returns the first problem, or null when it's fine.
-// The create form runs it for quick feedback and the server action runs it again.
-export function validatePuzzle(columns: Columns, words: PuzzleWord[]): string | null {
-  if (columns.length < MIN_COLUMNS || columns.length > MAX_COLUMNS) {
+// Checks the grid's shape and tiles. Returns the first problem, or null when it's fine.
+export function validateGrid(columns: Columns): string | null {
+  if (!Array.isArray(columns) || columns.length < MIN_COLUMNS || columns.length > MAX_COLUMNS) {
     return `Use ${MIN_COLUMNS}–${MAX_COLUMNS} columns.`;
   }
   const rows = columns[0]?.length ?? 0;
@@ -21,6 +20,14 @@ export function validatePuzzle(columns: Columns, words: PuzzleWord[]): string | 
   if (columns.some((c) => c.some((tile) => !TILE.test(tile)))) {
     return "Tiles hold 0–3 letters, A to Z.";
   }
+  return null;
+}
+
+// Checks a puzzle before it's saved. Returns the first problem, or null when it's fine.
+// The create form runs it for quick feedback and the server action runs it again.
+export function validatePuzzle(columns: Columns, words: PuzzleWord[]): string | null {
+  const gridProblem = validateGrid(columns);
+  if (gridProblem) return gridProblem;
   if (words.length === 0) return "Add at least one word.";
 
   const seen = new Set<string>();
