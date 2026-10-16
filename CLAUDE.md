@@ -39,7 +39,7 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 
 **Links:**
 - GitHub (public): https://github.com/bennchristian/FC-Bootcamp
-- Portfolio: TODO, once Vercel gives a URL
+- Portfolio: https://bennett-christian-portfolio.vercel.app (Root Directory `portfolio`)
 - Clone: https://fc-bootcamp.vercel.app (Vercel project `fc-bootcamp`, Root Directory `clone`)
 - Walkthrough videos (clone, portfolio): TODO, recorded after 17:00 Fri
 
@@ -47,6 +47,7 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 
 - **Course materials** are in `docs/bootcamp/week-{1..4}.md`. They're gitignored and live only on this machine, because the repo is public. BMAD reads `docs/` as project knowledge.
 - **Run `npm` commands from inside an app folder**, never at the repo root. The two apps share nothing.
+- **Portfolio text** all lives in `portfolio/content/site.json`. Under `npm run dev`, the "Edit text" toggle edits it in place and saves back to that file (`portfolio/README.md`). The live site has no editing.
 - **Deploy** happens by pushing to `main`. Vercel's GitHub integration rebuilds whichever project's Root Directory changed. Week 1 says to do the first deploy by hand through the Vercel dashboard import before using any shortcut.
 - **BMAD** is installed in `_bmad/`. Its planning runs write into dated folders under `_bmad-output/`. A run's output gets promoted to the root `PRD.md`, `ARCHITECTURE.md` or `DESIGN.md` once that run is final. Never repoint BMAD output at the repo root.
 - **Supabase and Vercel dashboard steps belong to Ben** (see `AGENTS.md`). When one is needed, say which page to open and what to set, then wait.
