@@ -40,6 +40,8 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
   const rows = tiles[0].length;
   const filledWords = words.filter((w) => w.word.trim() !== "");
   const problem = validatePuzzle(tiles, filledWords);
+  // A fresh form has no words yet; that's not worth a red error before the creator starts.
+  const shownProblem = filledWords.length > 0 ? problem : null;
 
   function setTile(col: number, row: number, value: string) {
     const letters = value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
@@ -280,9 +282,9 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
         </button>
       </section>
 
-      {(state.message || problem) && (
+      {(state.message || shownProblem) && (
         <p className="text-sm text-red-400" aria-live="polite">
-          {state.message || problem}
+          {state.message || shownProblem}
         </p>
       )}
       <button
