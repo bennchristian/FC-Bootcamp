@@ -26,7 +26,12 @@ async function askGemini<T>(prompt: string, schema: object): Promise<T> {
         headers: { "Content-Type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json", responseSchema: schema },
+          generationConfig: {
+            // Thinking off: about 4s instead of about 15s per call, and the word picks are as good.
+            thinkingConfig: { thinkingBudget: 0 },
+            responseMimeType: "application/json",
+            responseSchema: schema,
+          },
         }),
       },
     );

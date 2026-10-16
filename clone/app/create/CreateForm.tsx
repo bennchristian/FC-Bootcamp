@@ -116,7 +116,7 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
           <li>
             <strong>Fastest:</strong> choose a grid size below and press{" "}
             <strong>✨ Generate puzzle</strong>. Gemini builds a grid and finds its 20 most common
-            words, which takes about 20–30 seconds.
+            words, which takes about 10–15 seconds.
           </li>
           <li>
             <strong>Or build it yourself:</strong> type letters into the tiles, then press{" "}

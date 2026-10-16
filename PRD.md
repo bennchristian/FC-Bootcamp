@@ -175,6 +175,8 @@ Each puzzle shows its players ranked by score and then by time. Above the rankin
 
 #### FR-20: Archive and personal stats (the FR-14 extra feature)
 
+**Cut on 2026-10-16 at 14:45** by the §6.2 cut rule (the second-account test hadn't passed yet). What survives is a "Past dailies" list on the home page with your score on each, which FR-12 needs so a guest can see their seeded history.
+
 A player sees every puzzle they've played, with their score and whether they won, plus their totals.
 
 **Demo login pattern (FR-12):** a "Play as guest" button signs the visitor in with a fresh Supabase anonymous account, and a database function gives that account a few past plays. Each visitor starts clean. A puzzle a guest creates is visible only to that guest, and guests never appear on a leaderboard.
