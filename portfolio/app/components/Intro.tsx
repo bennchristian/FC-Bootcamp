@@ -1,5 +1,7 @@
 import Image from "next/image";
+import content from "@/content/site.json";
 import photo from "@/public/bennett.jpg";
+import Editable from "./Editable";
 
 export default function Intro() {
   return (
@@ -14,12 +16,10 @@ export default function Intro() {
         className="size-32 rounded-full border border-line object-cover sm:size-36"
       />
       <h1 className="mt-8 font-serif text-5xl tracking-tight">
-        Bennett Christian
+        <Editable path="name" text={content.name} />
       </h1>
       <p className="mt-6 text-lg leading-relaxed text-muted">
-        I&apos;m a Frontier Commons fellow learning to build software. This
-        week I&apos;m working through the Build Bootcamp with Claude Code,
-        GitHub and Vercel.
+        <Editable path="intro.bio" text={content.intro.bio} />
       </p>
     </section>
   );

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Newsreader } from "next/font/google";
+import content from "@/content/site.json";
+import EditModeProvider from "./components/EditMode";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,7 +15,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Bennett Christian",
+  title: content.name,
   description:
     "Bennett Christian, a Frontier Commons fellow: what I'm building and learning, and how to reach me.",
 };
@@ -24,7 +26,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${newsreader.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <EditModeProvider>{children}</EditModeProvider>
+      </body>
     </html>
   );
 }
