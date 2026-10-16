@@ -126,6 +126,11 @@
         "label": "GitHub",
         "text": "github.com/bennchristian",
         "href": "https://github.com/bennchristian"
+      },
+      {
+        "label": "Buy me a coffee",
+        "text": "buymeacoffee.com/bennchr",
+        "href": "https://buymeacoffee.com/bennchr"
       }
     ]
   }
