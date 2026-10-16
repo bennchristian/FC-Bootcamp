@@ -13,31 +13,40 @@ export default function Nav() {
         <a href="#about" className="font-serif text-lg">
           <Editable path="name" text={content.name} />
         </a>
-        <button
-          type="button"
-          className="text-sm uppercase tracking-widest sm:hidden"
-          aria-expanded={open}
-          aria-controls="nav-links"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? "Close" : "Menu"}
-        </button>
-        <ul
-          id="nav-links"
-          className={`${open ? "flex" : "hidden"} absolute inset-x-0 top-full flex-col gap-4 border-b border-line bg-background px-6 py-5 sm:static sm:flex sm:flex-row sm:gap-6 sm:border-0 sm:bg-transparent sm:p-0`}
-        >
-          {content.nav.map((link, i) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className="text-muted hover:text-accent sm:text-sm"
-                onClick={() => setOpen(false)}
-              >
-                <Editable path={`nav.${i}.label`} text={link.label} />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <ul
+            id="nav-links"
+            className={`${open ? "flex" : "hidden"} absolute inset-x-0 top-full flex-col gap-4 border-b border-line bg-background px-6 py-5 sm:static sm:flex sm:flex-row sm:gap-6 sm:border-0 sm:bg-transparent sm:p-0`}
+          >
+            {content.nav.map((link, i) => (
+              <li key={link.href}>
+                <a
+                  href={link.href}
+                  className="text-muted hover:text-accent sm:text-sm"
+                  onClick={() => setOpen(false)}
+                >
+                  <Editable path={`nav.${i}.label`} text={link.label} />
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a
+            href={content.resumeFile.href}
+            download
+            className="rounded-full border border-accent px-3 py-1 text-sm text-accent hover:bg-accent hover:text-background"
+          >
+            <Editable path="resumeFile.label" text={content.resumeFile.label} /> ↓
+          </a>
+          <button
+            type="button"
+            className="text-sm uppercase tracking-widest sm:hidden"
+            aria-expanded={open}
+            aria-controls="nav-links"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
       </nav>
     </header>
   );

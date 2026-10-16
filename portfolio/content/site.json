@@ -14,6 +14,10 @@
       "label": "Learning"
     },
     {
+      "href": "#resume",
+      "label": "Resume"
+    },
+    {
       "href": "#contact",
       "label": "Contact"
     }
@@ -133,5 +137,212 @@
         "href": "https://buymeacoffee.com/bennchr"
       }
     ]
+  },
+  "resume": {
+    "heading": "Resume",
+    "blurb": "Bachelor of Laws from NUS, now an Innovation Fellow (Build Track) at Frontier Commons. Read it here, or download the PDF.",
+    "openLabel": "Read my resume",
+    "downloadLabel": "Download PDF",
+    "sections": [
+      {
+        "title": "Education",
+        "entries": [
+          {
+            "title": "National University of Singapore",
+            "subtitle": "Bachelor of Laws (LLB), Second Upper Class Honours",
+            "dates": "2022 – 2026",
+            "points": []
+          },
+          {
+            "title": "Anglo-Chinese Junior College",
+            "subtitle": "GCE ‘A’ Level",
+            "dates": "2018 – 2019",
+            "points": []
+          }
+        ]
+      },
+      {
+        "title": "Experience",
+        "entries": [
+          {
+            "title": "Frontier Commons",
+            "subtitle": "Innovation Fellow (Build Track)",
+            "dates": "Sep 2026 – Oct 2026",
+            "points": [
+              "Selected via a technical challenge for an 8-week fellowship at a US-based tech innovation lab. Researching, building, user testing and documenting digital prototypes, and scoping and delivering self-directed digital projects end to end in an asynchronous, cross-border team."
+            ]
+          },
+          {
+            "title": "Adecco Singapore",
+            "subtitle": "Corporate Innovation & Special Projects Executive",
+            "dates": "Jun 2026 – Aug 2026",
+            "points": [
+              "Leading end-to-end research on government pilots presented to the Ministry of Manpower, including Project Global Ready (a global mobility framework for working-age individuals), the Johor-Singapore Special Economic Zone (JS-SEZ), and raising regulation and standards in the recruitment and employment industries. Scope spans desk research, primary research design, fieldwork, and presenting findings to MOM.",
+              "Building P&L and market-sizing models to test the commercial viability of new initiatives, including a Mystery Shopper programme and the JS-SEZ opportunity.",
+              "Evaluating prospective partners for strategic collaborations, running scoping meetings and assessing fit."
+            ]
+          },
+          {
+            "title": "Fortress Law Corporation",
+            "subtitle": "Legal Intern",
+            "dates": "Jul 2025",
+            "points": [
+              "Conducted targeted legal research on criminal matters, including sentencing precedents and procedure. Attended court mentions and client meetings as minute-taker, and prepared research memoranda for supervising counsel."
+            ]
+          },
+          {
+            "title": "RCLT",
+            "subtitle": "Legal Intern",
+            "dates": "Jun 2025",
+            "points": [
+              "Co-authored a published legal article on corporate criminal liability in Singapore, and gave an internal presentation on practical AI in legal practice: research tools, drafting assistance and workflow integration."
+            ]
+          },
+          {
+            "title": "International Justice Mission, Manila",
+            "subtitle": "Legal Intern, Prosecution Development Team",
+            "dates": "May – Jul 2024",
+            "points": [
+              "Assisted with legal research and writing for cases of child sexual abuse and trafficking, proofread and filed evidence, and took minutes for policy discussions."
+            ]
+          },
+          {
+            "title": "MediateGuru",
+            "subtitle": "Virtual International Mediation Competition",
+            "dates": "2023",
+            "points": []
+          },
+          {
+            "title": "A&G",
+            "subtitle": "Contract Drafting & Negotiation Competition",
+            "dates": "2023",
+            "points": []
+          },
+          {
+            "title": "Singapore Armed Forces",
+            "subtitle": "BMTC Platoon Commander",
+            "dates": "2020 – 2021",
+            "points": [
+              "Managed a platoon's day-to-day activities, administration and welfare, and planned and ran school- and company-level events.",
+              "Awarded the Commander Coin for organising the first Parent-Commander Video Teleconference during Covid-19, later used for all recruits while parents couldn't visit."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Voluntary work",
+        "entries": [
+          {
+            "title": "Humanitarian trips and conferences",
+            "subtitle": "",
+            "dates": "2024 – 2026",
+            "points": [
+              "5th UN Global Peace Summit, Humanitarian Affairs (Bangkok, Jan 2026): invited delegate for emerging leaders to meet peace activists and learn sustainable peace-building methods.",
+              "Lausanne Freedom and Justice Conference (Sri Lanka, Jan 2025): met lawyers, business and organisational leaders, theologians and students to discuss global peace issues.",
+              "Youth With a Mission (Cebu, Philippines, Jun 2024): served with social service organisations helping marginalised communities and children involved in sex work.",
+              "Refugee Learning Centre (Bogor, Indonesia, Aug 2024): served Afghan refugee communities."
+            ]
+          },
+          {
+            "title": "Mobilising communities to serve non-profits",
+            "subtitle": "",
+            "dates": "Jan – May 2026",
+            "points": [
+              "Initiated and led a large-scale mobilisation with Homeless Hearts of Singapore, The Lighthouse, HealthServe, Hope Initiative Alliance, Our Father’s World and Comeback, serving migrant workers, rough sleepers and others."
+            ]
+          },
+          {
+            "title": "Community Engagement Day, Oasis Hospice",
+            "subtitle": "",
+            "dates": "2023",
+            "points": [
+              "Led a team of university students to visit Oasis Hospice and learn about alternative care for terminally ill patients."
+            ]
+          },
+          {
+            "title": "CAPT Kindle, Foster Care",
+            "subtitle": "",
+            "dates": "2022 – 2023",
+            "points": [
+              "Mentored foster children aged 9–12, planning weekly activities to build relationships and social and emotional skills."
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Co-curricular activities",
+        "entries": [
+          {
+            "title": "Varsity Christian Fellowship",
+            "subtitle": "EXCO Outreach Coordinator",
+            "dates": "2025 – 2026",
+            "points": [
+              "Planned NUS-wide events on justice work and community engagement, liaising with OSA, NUSSU, NGOs and social enterprises."
+            ]
+          },
+          {
+            "title": "Varsity Law Christian Fellowship",
+            "subtitle": "Vice-Chairperson",
+            "dates": "2024 – 2025",
+            "points": [
+              "Set the vision and direction of the NUS Law Christian Fellowship, and ran weekly and ad-hoc school-wide events."
+            ]
+          },
+          {
+            "title": "Pro Bono Group",
+            "subtitle": "",
+            "dates": "2022 – 2025",
+            "points": [
+              "Legal Clinics: helped give legal-aid advice.",
+              "Project Law Help: promoted access to justice for voluntary welfare organisations such as the Singapore Student Support Network.",
+              "Project Law and You: gave migrant domestic workers legal information on their rights and liabilities, with Justice Without Borders, ACMi and MOM."
+            ]
+          },
+          {
+            "title": "Criminal Justice Club, Military Justice Project",
+            "subtitle": "Vice-President",
+            "dates": "2023 – 2024",
+            "points": [
+              "Increased access to justice for servicemen in the military justice system who may not know their rights."
+            ]
+          },
+          {
+            "title": "Criminal Justice Club, The Recourse Initiative",
+            "subtitle": "",
+            "dates": "2023 – 2024",
+            "points": [
+              "A student-led initiative offering recourse to people who believe they were wrongfully convicted or given a manifestly excessive sentence."
+            ]
+          },
+          {
+            "title": "Alt+Law",
+            "subtitle": "Organising committee, RHTLaw Asia Legislation Drafting Competition",
+            "dates": "2022 – 2023",
+            "points": []
+          },
+          {
+            "title": "CAPT Sports",
+            "subtitle": "",
+            "dates": "2022 – 2023",
+            "points": [
+              "Cardio, Captain: started a student-run calisthenics group in the residential college.",
+              "CAPTSmash, Captain: competed in inter-college games."
+            ]
+          },
+          {
+            "title": "Students’ Leaders Council",
+            "subtitle": "Head of Student Task Force",
+            "dates": "2018 – 2019",
+            "points": [
+              "Led surveys and research into student needs, spearheaded projects that changed the school, and coordinated ad-hoc school-wide events."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "resumeFile": {
+    "label": "Resume",
+    "href": "/bennett-christian-resume.pdf"
   }
 }
