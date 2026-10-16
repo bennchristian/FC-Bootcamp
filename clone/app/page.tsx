@@ -1,8 +1,80 @@
+import Link from "next/link";
+import { connection } from "next/server";
+import { Suspense } from "react";
+import { todayUtc8 } from "@/lib/daily";
+import { createClient } from "@/lib/supabase/server";
+
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-3 px-4 text-center">
-      <h1 className="text-4xl font-bold tracking-[0.3em]">CADGY</h1>
-      <p className="text-neutral-400">A daily word-tile puzzle. Pick one tile from each column to make a word.</p>
+    <main className="mx-auto flex w-full max-w-xl flex-1 flex-col gap-8 px-4 py-10">
+      <header className="flex flex-col items-center gap-3 text-center">
+        <h1 className="text-4xl font-bold tracking-[0.3em]">CADGY</h1>
+        <p className="text-neutral-400">
+          A daily word-tile puzzle. Pick one tile from each column to make a word.
+        </p>
+      </header>
+      <Suspense fallback={<p className="text-center text-neutral-500">Loading puzzles…</p>}>
+        <PuzzleLists />
+      </Suspense>
     </main>
+  );
+}
+
+async function PuzzleLists() {
+  await connection(); // "today" changes over time, so render per request
+  const supabase = await createClient();
+  const [{ data: daily }, { data: community }] = await Promise.all([
+    supabase
+      .from("puzzles")
+      .select("id, title, daily_date")
+      .lte("daily_date", todayUtc8())
+      .order("daily_date", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("puzzles")
+      .select("id, title, created_at, profiles(username)")
+      .is("daily_date", null)
+      .order("created_at", { ascending: false }),
+  ]);
+
+  return (
+    <>
+      <section className="flex flex-col items-center gap-3">
+        {daily ? (
+          <Link
+            href={`/play/${daily.id}`}
+            className="rounded-lg bg-amber-400 px-6 py-3 font-semibold text-neutral-900 hover:bg-amber-300"
+          >
+            Play today&apos;s puzzle · {daily.daily_date}
+          </Link>
+        ) : (
+          <p className="text-neutral-400">No daily puzzle yet. Check back soon.</p>
+        )}
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-semibold">Community puzzles</h2>
+        {community && community.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {community.map((puzzle) => (
+              <li key={puzzle.id}>
+                <Link
+                  href={`/play/${puzzle.id}`}
+                  className="flex justify-between rounded-lg border border-neutral-700 px-4 py-3 hover:border-neutral-500"
+                >
+                  <span>{puzzle.title ?? "Untitled puzzle"}</span>
+                  <span className="text-neutral-500">
+                    by {(puzzle.profiles as { username?: string } | null)?.username ?? "someone"}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-neutral-400">No community puzzles yet.</p>
+        )}
+      </section>
+    </>
   );
 }
