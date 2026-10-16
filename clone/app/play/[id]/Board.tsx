@@ -1,7 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { type Columns, type PuzzleWord, POINTS_PER_WORD, findPath } from "@/lib/grid";
+import { type Columns, type PuzzleWord, POINTS_PER_WORD, findPath, formatSeconds } from "@/lib/grid";
 import { createClient } from "@/lib/supabase/client";
 
 const WIN_SECONDS = 180;
@@ -36,6 +37,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const [finishedAt, setFinishedAt] = useState<number | null>(saved?.finishedAt ?? null);
   const [now, setNow] = useState<number | null>(null);
   const supabase = useMemo(() => createClient(), []);
+  const router = useRouter();
   const saving = useRef(Promise.resolve());
 
   const answers = useMemo(() => new Set(words.map((w) => w.word)), [words]);
@@ -88,6 +90,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
         { onConflict: "user_id,puzzle_id" },
       );
       setSaveError(error ? "Couldn't save your progress. Check your connection." : "");
+      if (!error) router.refresh(); // updates the leaderboard below
     });
   }
 
@@ -156,7 +159,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
           Score: <strong>{found.length * POINTS_PER_WORD}</strong>
         </span>
         <span className="rounded-full border border-neutral-600 px-3 py-1 tabular-nums">
-          ⏱ {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
+          ⏱ {formatSeconds(elapsed)}
         </span>
       </div>
 
@@ -200,7 +203,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
       {allFound && (
         <p className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-neutral-900">
           {won ? "You won!" : "All words found!"} {found.length} words in{" "}
-          {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
+          {formatSeconds(elapsed)}
         </p>
       )}
 

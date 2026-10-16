@@ -5,6 +5,7 @@ import type { Columns, PuzzleWord } from "@/lib/grid";
 import { getCurrentPlayer } from "@/lib/player";
 import { createClient } from "@/lib/supabase/server";
 import Board from "./Board";
+import Leaderboard from "./Leaderboard";
 
 export default function PlayPage(props: PageProps<"/play/[id]">) {
   return (
@@ -68,6 +69,9 @@ async function PuzzleLoader({ params }: { params: Promise<{ id: string }> }) {
           }
         }
       />
+      <Suspense fallback={<p className="text-sm text-neutral-500">Loading leaderboard…</p>}>
+        <Leaderboard puzzleId={puzzle.id} totalWords={words?.length ?? 0} playerId={player.id} />
+      </Suspense>
     </>
   );
 }

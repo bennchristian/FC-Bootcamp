@@ -28,3 +28,8 @@ export function findPath(columns: Columns, word: string): number[] | null {
 
   return walk(0, 0);
 }
+
+// 75 → "1:15"
+export function formatSeconds(total: number): string {
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+}
