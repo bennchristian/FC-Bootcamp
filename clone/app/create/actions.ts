@@ -1,10 +1,17 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { suggestCommonWords } from "@/lib/gemini";
-import { type Columns, type PuzzleWord, buildableStrings } from "@/lib/grid";
+import { commonWordsOfLength, suggestCommonWords } from "@/lib/gemini";
+import { type Columns, type PuzzleWord, buildableStrings, gridFromWords } from "@/lib/grid";
 import { getCurrentPlayer } from "@/lib/player";
-import { validateGrid, validatePuzzle } from "@/lib/puzzle";
+import {
+  MAX_COLUMNS,
+  MAX_ROWS,
+  MIN_COLUMNS,
+  MIN_ROWS,
+  validateGrid,
+  validatePuzzle,
+} from "@/lib/puzzle";
 import { createClient } from "@/lib/supabase/server";
 
 export type CreateState = { message: string };
@@ -46,19 +53,18 @@ export async function createPuzzle(_prev: CreateState, formData: FormData): Prom
 
 const SUGGESTED = 20; // the top 10 become basic words, 11–20 bonus words with clues
 const BASIC = 10;
-const MAX_CANDIDATES = 5000;
+const MAX_CANDIDATES = 8000;
+const SEED_WORDS = 60;
 
-// Auto-fill: Gemini picks the most common real words the grid can make (PRD §4.4).
-export async function suggestWords(
-  columns: Columns,
-): Promise<{ words: PuzzleWord[] } | { message: string }> {
-  if (!(await getCurrentPlayer())) return { message: "Sign in to use auto-fill." };
-  const problem = validateGrid(columns);
-  if (problem) return { message: problem };
+type FillResult = { message: string } | { words: PuzzleWord[] };
 
+// Asks Gemini for the grid's most common words and keeps only ones the grid can really make,
+// in Gemini's order, without repeats.
+async function commonWordsIn(columns: Columns): Promise<FillResult> {
   const candidates = buildableStrings(columns);
+  if (candidates.length === 0) return { message: "Fill in the tiles first." };
   if (candidates.length > MAX_CANDIDATES) {
-    return { message: "This grid is too big to auto-fill. List the words by hand." };
+    return { message: "This grid is too big to auto-fill. Use fewer tiles, or list words by hand." };
   }
 
   let suggestions;
@@ -68,7 +74,6 @@ export async function suggestWords(
     return { message: error instanceof Error ? error.message : "Auto-fill failed." };
   }
 
-  // Keep only words the grid can really make, in Gemini's order, without repeats.
   const allowed = new Set(candidates);
   const seen = new Set<string>();
   const words: PuzzleWord[] = [];
@@ -83,4 +88,37 @@ export async function suggestWords(
 
   if (words.length === 0) return { message: "Gemini didn't find any common words in this grid." };
   return { words };
+}
+
+// "Find words in my grid": the most common words a hand-made grid can make (PRD §4.4).
+export async function suggestWords(columns: Columns): Promise<FillResult> {
+  if (!(await getCurrentPlayer())) return { message: "Sign in to use auto-fill." };
+  const problem = validateGrid(columns);
+  if (problem) return { message: problem };
+  return commonWordsIn(columns);
+}
+
+// "Generate puzzle": a new grid built from Gemini's seed words, then its most common words.
+export async function generatePuzzle(
+  cols: number,
+  rows: number,
+): Promise<{ message: string } | { columns: Columns; words: PuzzleWord[] }> {
+  if (!(await getCurrentPlayer())) return { message: "Sign in to generate a puzzle." };
+  if (cols < MIN_COLUMNS || cols > MAX_COLUMNS || rows < MIN_ROWS || rows > MAX_ROWS) {
+    return { message: "Pick a grid size first." };
+  }
+
+  let seeds: string[];
+  try {
+    seeds = (await commonWordsOfLength(cols, SEED_WORDS))
+      .map((w) => w.trim().toUpperCase())
+      .filter((w) => w.length === cols && /^[A-Z]+$/.test(w));
+  } catch (error) {
+    return { message: error instanceof Error ? error.message : "Generating failed." };
+  }
+  if (seeds.length < 10) return { message: "Gemini didn't suggest enough words. Try again." };
+
+  const columns = gridFromWords(seeds, cols, rows);
+  const result = await commonWordsIn(columns);
+  return "message" in result ? result : { columns, words: result.words };
 }

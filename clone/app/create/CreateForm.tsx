@@ -10,7 +10,7 @@ import {
   validateGrid,
   validatePuzzle,
 } from "@/lib/puzzle";
-import { type CreateState, createPuzzle, suggestWords } from "./actions";
+import { type CreateState, createPuzzle, generatePuzzle, suggestWords } from "./actions";
 
 const input = "rounded-md border border-neutral-600 bg-neutral-900 px-3 py-2";
 
@@ -32,7 +32,9 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
     message: "",
   });
   const [filling, startFilling] = useTransition();
+  const [generating, startGenerating] = useTransition();
   const [fillMessage, setFillMessage] = useState("");
+  const busy = filling || generating;
 
   const cols = tiles.length;
   const rows = tiles[0].length;
@@ -63,6 +65,28 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
     });
   }
 
+  function generate() {
+    setFillMessage("");
+    startGenerating(async () => {
+      let result;
+      try {
+        result = await generatePuzzle(cols, rows);
+      } catch {
+        setFillMessage("Generating didn't respond. Try again.");
+        return;
+      }
+      if ("message" in result) {
+        setFillMessage(result.message);
+      } else {
+        setTiles(result.columns);
+        setWords(result.words);
+        setFillMessage(
+          `Generated a grid with ${result.words.length} words. Check them, then press Create puzzle.`,
+        );
+      }
+    });
+  }
+
   function setWord(index: number, change: Partial<PuzzleWord>) {
     setWords(words.map((w, i) => (i === index ? { ...w, ...change } : w)));
   }
@@ -81,6 +105,30 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
   return (
     <form action={formAction} className="flex flex-col gap-6">
       <input type="hidden" name="payload" value={payload} />
+
+      <section className="flex flex-col gap-3 rounded-lg border border-amber-400/40 bg-amber-400/5 p-4 text-sm">
+        <h2 className="font-semibold">How to make a puzzle</h2>
+        <ol className="flex list-decimal flex-col gap-1 pl-5 text-neutral-300">
+          <li>
+            Players spell words by picking <strong>one tile from each column</strong>, left to
+            right. A 5-column grid makes 5-letter words.
+          </li>
+          <li>
+            <strong>Fastest:</strong> choose a grid size below and press{" "}
+            <strong>✨ Generate puzzle</strong>. Gemini builds a grid and finds its 20 most common
+            words, which takes about 20–30 seconds.
+          </li>
+          <li>
+            <strong>Or build it yourself:</strong> type letters into the tiles, then press{" "}
+            <strong>Find words in my grid</strong>, or list the words by hand.
+          </li>
+          <li>
+            The first 10 words are <strong>basic</strong>. Words 11–20 are <strong>bonus</strong>{" "}
+            words, and each needs a clue that players see before they find it.
+          </li>
+          <li>Check the words, then press <strong>Create puzzle</strong> at the bottom.</li>
+        </ol>
+      </section>
 
       <section className="flex flex-col gap-3">
         <label className="flex flex-col gap-1 text-sm">
@@ -101,8 +149,18 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="font-semibold">Grid</h2>
-        <div className="flex gap-4 text-sm">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="font-semibold">Grid</h2>
+          <button
+            type="button"
+            onClick={generate}
+            disabled={busy}
+            className="rounded-md bg-amber-400 px-3 py-1.5 text-sm font-semibold text-neutral-900 hover:bg-amber-300 disabled:opacity-50"
+          >
+            {generating ? "Generating…" : "✨ Generate puzzle"}
+          </button>
+        </div>
+        <div className="flex flex-wrap gap-4 text-sm">
           <label className="flex items-center gap-2">
             Columns
             <select
@@ -131,7 +189,9 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
           </label>
         </div>
         <p className="text-sm text-neutral-500">
-          Each tile holds 0–3 letters. Leave a tile empty for a blank ❤️ tile.
+          One letter per tile, or up to 3 for a combo tile like QU. An empty tile is a blank ❤️,
+          which hand-listed words can skip. Auto-fill only uses words with a letter from every
+          column.
         </p>
         <div className="flex gap-2">
           {tiles.map((column, c) => (
@@ -158,15 +218,14 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
           <button
             type="button"
             onClick={autoFill}
-            disabled={filling || validateGrid(tiles) !== null}
+            disabled={busy || validateGrid(tiles) !== null}
             className="rounded-md border border-amber-400 px-3 py-1.5 text-sm font-semibold text-amber-400 hover:bg-amber-400 hover:text-neutral-900 disabled:opacity-50"
           >
-            {filling ? "Finding words…" : "✨ Auto-fill words"}
+            {filling ? "Finding words…" : "Find words in my grid"}
           </button>
         </div>
         <p className="text-sm text-neutral-500">
-          Auto-fill asks Gemini for the 20 most common words the grid makes: the top 10 become basic
-          words and the next 10 bonus words with a clue. You can also list or edit words by hand.
+          Every word takes one tile from each column. You can edit, remove or add words by hand.
         </p>
         {fillMessage && (
           <p className="text-sm text-neutral-300" aria-live="polite">

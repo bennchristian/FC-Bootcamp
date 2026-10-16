@@ -29,13 +29,48 @@ export function findPath(columns: Columns, word: string): number[] | null {
   return walk(0, 0);
 }
 
-// Every distinct string of 3+ letters the grid can spell, one tile per column.
+// Every distinct string the grid can spell with a lettered tile from every column.
+// Blank tiles are skipped, so auto-filled words always use all the columns.
 export function buildableStrings(columns: Columns): string[] {
   let strings = [""];
   for (const column of columns) {
-    strings = strings.flatMap((prefix) => column.map((tile) => prefix + tile));
+    const tiles = column.filter((tile) => tile !== "");
+    strings = strings.flatMap((prefix) => tiles.map((tile) => prefix + tile));
   }
-  return [...new Set(strings)].filter((s) => s.length >= 3);
+  return [...new Set(strings)];
+}
+
+// Builds a grid from seed words of the grid's length. It packs whole seed words into the
+// columns (each column holds at most `rows` letters), tries many word orders, and keeps the
+// grid that can spell the most seeds. Leftover slots get each position's most common letters.
+export function gridFromWords(words: string[], cols: number, rows: number): Columns {
+  const shuffled = () => [...words].sort(() => Math.random() - 0.5);
+  const spells = (sets: Set<string>[]) =>
+    words.filter((w) => [...w].every((ch, i) => sets[i].has(ch))).length;
+
+  let best: Set<string>[] = [];
+  let bestCount = -1;
+  for (let attempt = 0; attempt < 300; attempt++) {
+    const sets = Array.from({ length: cols }, () => new Set<string>());
+    for (const word of shuffled()) {
+      if ([...word].every((ch, i) => sets[i].has(ch) || sets[i].size < rows)) {
+        [...word].forEach((ch, i) => sets[i].add(ch));
+      }
+    }
+    const count = spells(sets);
+    if (count > bestCount) [best, bestCount] = [sets, count];
+  }
+
+  return best.map((set, col) => {
+    const byFrequency = [...new Set(words.map((w) => w[col]))].sort(
+      (a, b) => words.filter((w) => w[col] === b).length - words.filter((w) => w[col] === a).length,
+    );
+    for (const letter of [...byFrequency, ..."EARSTOLINDUCHMPBGKWY"]) {
+      if (set.size === rows) break;
+      set.add(letter);
+    }
+    return [...set].sort(() => Math.random() - 0.5);
+  });
 }
 
 // 75 → "1:15"

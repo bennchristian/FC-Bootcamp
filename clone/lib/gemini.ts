@@ -1,29 +1,65 @@
 // Server-only: import it from server actions, never from a client component.
-// Picks the most common real words from a grid's buildable strings, using Gemini's free tier.
-// The key is server-only (GEMINI_API_KEY); the model can be swapped with GEMINI_MODEL.
-const MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";
+// Word help from Gemini's free tier. The key is GEMINI_API_KEY.
+// Tried in order: the free tier often answers 503 "high demand", so a busy model hands over
+// to the next one. GEMINI_MODEL, when set, goes first.
+const MODELS = [
+  process.env.GEMINI_MODEL,
+  "gemini-3.5-flash",
+  "gemini-flash-latest",
+  "gemini-flash-lite-latest",
+  "gemini-2.5-flash",
+].filter((m, i, all): m is string => !!m && all.indexOf(m) === i);
 
 export type Suggestion = { word: string; clue: string };
 
-const SCHEMA = {
-  type: "OBJECT",
-  properties: {
-    words: {
-      type: "ARRAY",
-      items: {
-        type: "OBJECT",
-        properties: { word: { type: "STRING" }, clue: { type: "STRING" } },
-        required: ["word", "clue"],
-      },
-    },
-  },
-  required: ["words"],
-};
-
-export async function suggestCommonWords(candidates: string[], limit: number): Promise<Suggestion[]> {
+// One JSON-mode call. `schema` uses Gemini's responseSchema format.
+async function askGemini<T>(prompt: string, schema: object): Promise<T> {
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error("Auto-fill isn't set up yet (no GEMINI_API_KEY).");
 
+  let lastError = "";
+  for (const model of MODELS) {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json", responseSchema: schema },
+        }),
+      },
+    );
+    if (!res.ok) {
+      lastError = `${model} returned ${res.status}`;
+      continue;
+    }
+    const body = await res.json();
+    const text: string | undefined = body?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (text) return JSON.parse(text) as T;
+    lastError = `${model} returned nothing`;
+  }
+  throw new Error(`Gemini is busy right now (${lastError}). Try again in a minute.`);
+}
+
+// Seed words for generating a grid: common words of exactly `length` letters.
+export async function commonWordsOfLength(length: number, count: number): Promise<string[]> {
+  const prompt = [
+    `List ${count} different common English words of exactly ${length} letters.`,
+    "Everyday words a typical adult knows. No proper nouns, abbreviations or offensive words.",
+    "Vary the words widely, with many different starting letters.",
+    `Variety seed: ${Math.floor(Math.random() * 1_000_000)}`,
+  ].join("\n");
+  const { words } = await askGemini<{ words: string[] }>(prompt, {
+    type: "OBJECT",
+    properties: { words: { type: "ARRAY", items: { type: "STRING" } } },
+    required: ["words"],
+  });
+  return words;
+}
+
+// From a grid's buildable strings, the most common real words, most common first, with clues.
+export async function suggestCommonWords(candidates: string[], limit: number): Promise<Suggestion[]> {
   const prompt = [
     "These letter strings can be built from a word-puzzle grid.",
     "Choose the ones that are real English words a typical adult knows.",
@@ -33,40 +69,19 @@ export async function suggestCommonWords(candidates: string[], limit: number): P
     "",
     candidates.join(" "),
   ].join("\n");
-
-  const res = await callGemini(key, prompt);
-  if (res.status === 503) throw new Error("Gemini is busy right now. Try again in a minute.");
-  if (res.status === 429) throw new Error("Gemini's free quota is used up for now. Try again later.");
-  if (!res.ok) {
-    const detail = await res.text();
-    throw new Error(`Gemini returned ${res.status}: ${detail.slice(0, 200)}`);
-  }
-  const body = await res.json();
-  const text: string | undefined = body?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Gemini returned no words.");
-  return (JSON.parse(text) as { words: Suggestion[] }).words;
-}
-
-// The free tier sometimes answers 503 "high demand", so one busy reply gets a second try.
-async function callGemini(key: string, prompt: string): Promise<Response> {
-  for (let attempt = 1; ; attempt++) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            // Thinking off: about 4s instead of about 15s, and the word picks are just as good.
-            thinkingConfig: { thinkingBudget: 0 },
-            responseMimeType: "application/json",
-            responseSchema: SCHEMA,
-          },
-        }),
+  const { words } = await askGemini<{ words: Suggestion[] }>(prompt, {
+    type: "OBJECT",
+    properties: {
+      words: {
+        type: "ARRAY",
+        items: {
+          type: "OBJECT",
+          properties: { word: { type: "STRING" }, clue: { type: "STRING" } },
+          required: ["word", "clue"],
+        },
       },
-    );
-    if (res.status !== 503 || attempt === 2) return res;
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-  }
+    },
+    required: ["words"],
+  });
+  return words;
 }
