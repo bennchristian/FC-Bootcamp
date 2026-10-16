@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { type Columns, type PuzzleWord, POINTS_PER_WORD, findPath, formatSeconds } from "@/lib/grid";
 import { createClient } from "@/lib/supabase/client";
 
@@ -42,6 +42,8 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const supabase = useMemo(() => createClient(), []);
   const router = useRouter();
   const saving = useRef(Promise.resolve());
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [link, setLink] = useState<string>("");
 
   const answers = useMemo(() => new Set(words.map((w) => w.word)), [words]);
   const allFound = words.length > 0 && found.length === words.length;
@@ -155,6 +157,27 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
     }
   }
 
+  // Draws a line through the picked tiles, left to right. Re-measured when the picks change,
+  // the window resizes, or the 3D gap finishes animating.
+  const measureLink = useCallback(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const box = grid.getBoundingClientRect();
+    const points = picks.flatMap((row, col) => {
+      const tile = row === null ? null : grid.querySelector(`[data-tile="${col}-${row}"]`);
+      if (!tile) return [];
+      const r = tile.getBoundingClientRect();
+      return [`${r.left - box.left + r.width / 2},${r.top - box.top + r.height / 2}`];
+    });
+    setLink(points.length > 1 ? points.join(" ") : "");
+  }, [picks]);
+
+  useLayoutEffect(() => {
+    measureLink();
+    window.addEventListener("resize", measureLink);
+    return () => window.removeEventListener("resize", measureLink);
+  }, [measureLink, threeD]);
+
   // Typing works too: letters, Backspace, Enter to submit, Escape to clear.
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -204,7 +227,20 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
         </button>
       </div>
 
-      <div className="flex gap-2">
+      <div ref={gridRef} className="relative flex gap-2" onTransitionEnd={measureLink}>
+        {/* Behind the tiles, so it shows in the gaps without covering letters. */}
+        {link && (
+          <svg className="pointer-events-none absolute inset-0 h-full w-full overflow-visible" aria-hidden>
+            <polyline
+              points={link}
+              fill="none"
+              stroke="#38bdf8"
+              strokeWidth={8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
         {columns.map((column, col) => (
           <div
             key={col}
@@ -219,6 +255,8 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
                 <button
                   key={row}
                   type="button"
+                  data-tile={`${col}-${row}`}
+                  aria-pressed={picked}
                   onClick={() => pickTile(col, row)}
                   aria-label={`${tile || "blank"}, used by ${remaining} more ${remaining === 1 ? "word" : "words"}`}
                   style={{
@@ -230,9 +268,13 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
                         ).join(", ")
                       : undefined,
                   }}
-                  className={`relative aspect-square rounded-md text-lg font-bold text-neutral-900 shadow transition ${
-                    remaining === 0 ? "bg-amber-400" : "bg-[#f1dcae]"
-                  } ${picked ? "ring-4 ring-sky-400" : ""}`}
+                  className={`relative aspect-square rounded-md text-lg font-bold shadow transition ${
+                    picked
+                      ? "scale-105 bg-sky-500 text-white ring-2 ring-sky-300"
+                      : remaining === 0
+                        ? "bg-amber-400 text-neutral-900"
+                        : "bg-[#f1dcae] text-neutral-900"
+                  }`}
                 >
                   {tile === "" ? "❤️" : tile}
                   {threeD && remaining > MAX_LAYERS && (
