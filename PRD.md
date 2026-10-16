@@ -15,7 +15,7 @@ It builds on Justin's brief to the fellows, the course docs in `docs/bootcamp/` 
 
 - **Product behaviour** is FR-8 to FR-10, FR-12 to FR-14, and the product-specific FRs in §4.4. The other FRs are deliverables Ben produces.
 - **Repo rules** (stack, security, data, commits) live in `RULES.md`, and roles and gates in `AGENTS.md`. This PRD points to them rather than restating them.
-- **§4.4 is a TODO** until the product breakdown picks the clone's product. It's filled by running `bmad-prd` again with update intent.
+- **§4.4** holds the clone's product requirements (Cadgy), filled on 2026-10-16 from the scope check.
 
 ## 1. Vision
 

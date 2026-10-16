@@ -14,7 +14,9 @@ The bootcamp fixes the stack: **Next.js, Supabase, Vercel, and Claude Code**, wi
 - Supabase is used **only in `clone/`**. The portfolio has no backend.
 - Both apps deploy through Vercel's GitHub integration, one Vercel project per folder.
 - **No library beyond the stack without Ben's OK**, however much it looks like it would help. Every extra dependency is one more thing that can break. Whatever `create-next-app` ships by default is fine.
-- TODO(agent): add Next.js and Supabase client conventions (server vs. client components, where the Supabase client is created) once `clone/` is scaffolded and the pattern actually exists.
+- **Supabase clients in `clone/`:** `lib/supabase/server.ts` for Server Components and server actions (a new client per request), `lib/supabase/client.ts` for Client Components, and `proxy.ts` to refresh the session on every request. Get the signed-in player with `getCurrentPlayer()` from `lib/player.ts`.
+- **Writes go through RLS as the player.** No Supabase secret key exists in either app. Multi-row writes that must succeed together go through a `security invoker` SQL function (for example `create_puzzle`).
+- **Other secrets stay server-only.** `GEMINI_API_KEY` is read only in `lib/gemini.ts`, which is imported only from server actions. Nothing secret gets a `NEXT_PUBLIC_` prefix.
 
 ## Security rules
 
@@ -39,7 +41,7 @@ Column and field contracts in `SCHEMA.md` are fixed. Add fields at the end, and 
 - **One change per commit**, with a message that says what it did, prefixed with the app it touches: `portfolio: add projects section`, `clone: comments table and RLS`. The history should read like the build order.
 - **Push after each change and confirm Vercel redeployed** before starting the next one.
 - **When a deploy breaks, read the Vercel build log to the file and line, then revert** rather than patching forward.
-- TODO(agent): the check command (likely `npm run build` and `npm run lint` inside each app folder) gets confirmed once the apps are scaffolded. It must pass before every handover.
+- **Check command**, run inside each app folder: `npm run lint && npm run build`. It must pass before every push and every handover.
 - Keep an explicit resolved/unresolved list when auditing. Never imply a pass fixed more than it did.
 
 ## Prefer enforcement over prose
