@@ -1,58 +1,60 @@
 # Portfolio walkthrough: script
 
-A draft for Ben to edit, then record. It runs 1:00–2:00 and is for Justin (PRD FR-15).
+A draft for Ben to edit, then record. It runs 1:30–2:00 and is for Justin (PRD FR-15). Laptop only, with two browser tabs.
 
 - **Spoken lines** are the quoted blocks. Everything in them comes from the repo.
-- **`[your words: …]`** is a slot for your own opinion. The hint after the colon points to where the fact is, but the opinion is yours to give.
+- **`[your words: …]`** is a slot for your own opinion. The hint after the colon points to the facts, but the opinion is yours.
 - **[ON SCREEN]** says what to show while you talk.
 
-Live: https://bennett-christian-portfolio.vercel.app · Repo: https://github.com/bennchristian/FC-Bootcamp
+Tab 1: https://bennett-christian-portfolio.vercel.app · Tab 2: https://github.com/bennchristian/FC-Bootcamp/tree/main/portfolio
 
 ---
 
-## 1. Hello (0:00–0:10)
+## 1. What it is (0:00–0:10)
 
-**[ON SCREEN]** The live site on your laptop, at the top of the page.
+**[ON SCREEN]** Tab 1, the live site, at the top of the page.
 
 > Hi Justin. This is my portfolio, live on Vercel. It's one page: who I am, what I'm making and learning, and how to reach me.
 
-## 2. The site (0:10–0:40)
+## 2. The features (0:10–0:45)
 
-**[ON SCREEN]** Scroll slowly from the intro to the bottom. Then show it on your phone, open **Menu** and tap **Contact**.
+**[ON SCREEN]** Scroll slowly down the page. Pause on each section as you name it. At Resume, click **Read my resume** and scroll inside it, then point at **Resume ↓** in the top right.
 
-> Up top is a short intro and a photo. Under "What I'm making" there's the Cadgy clone, with links to play it and read the code. Then two side projects I built with AI: a finance tracker that reads my bank alert emails and sorts them automatically, and a fitness app that interviews you and builds a personal plan. Last is the repo for this whole bootcamp.
+> Up top is a short intro and a photo. Under "What I'm making" there's the Cadgy clone, with links to play it and read the code. Then two side projects I built with AI: a finance tracker that reads my bank alert emails and sorts them automatically, and a fitness app that interviews you and builds a personal plan.
 >
-> "What I'm learning" is a log from my notes this week: scoping before code, taking a product apart, and row-level security. Contact has email, phone, LinkedIn, GitHub, and a Buy Me a Coffee link.
+> "What I'm learning" is a log from my notes this week. My resume opens right on the page to scroll through, and this button downloads the PDF. Contact has email, phone, LinkedIn, GitHub and Buy Me a Coffee.
 >
-> My resume opens right on the page so you can scroll through it, and the button at the top right downloads the PDF.
->
-> On a phone, the links fold into a menu, and nothing scrolls sideways.
+> It also works on a phone: the links fold into a menu.
 
-## 3. How it changed (0:40–1:05)
+## 3. Why these (0:45–1:05)
 
-**[ON SCREEN]** GitHub, the portfolio's commit history: https://github.com/bennchristian/FC-Bootcamp/commits/main/portfolio
+**[ON SCREEN]** Scroll back up to the projects.
 
-> It went live first with three plain sections, then I fixed the tab title. After that, every change was its own commit, and Vercel redeployed after each push: project write-ups with real links, the learning section, the phone layout and menu, the photo, the extra contact details, my two side projects, and the resume.
->
-> [your words: which change made the biggest difference. Hint: compare the first commit with now; the project links and the photo are the biggest visual jumps.]
+> [your words: why you chose these sections. Hint: the example portfolios Justin shared all had real projects with working links, a photo and contact details, and the polished ones added an extra section like "what I'm learning". The side projects show what you've built outside the bootcamp, and the resume covers your law and research background.]
 
-## 4. The files (1:05–1:35)
+## 4. What was hard (1:05–1:20)
 
-**[ON SCREEN]** VS Code with `portfolio/` expanded. Open each file as you name it.
+**[ON SCREEN]** Stay on the live site.
 
-> `app/page.tsx` stacks the sections in order, and each section is its own file in `app/components`. `layout.tsx` sets the fonts and the tab title.
->
-> Every word on the page lives in one file, `content/site.json`.
+> [your words: what was hard. Hint: you built it in about two hours before a hard stop, right after the clone, and publishing each change as its own commit meant checking every one before the next.]
 
-**[ON SCREEN]** `npm run dev` running. Click **Edit text**, click the intro, and show the dashed outlines. Don't save a change you don't want, or undo it after with `git checkout portfolio/content/site.json`.
+## 5. The repo (1:20–1:50)
 
-> When I run it locally, this toggle lets me edit any text on the page, and it saves straight back to that file. The live site has no backend, so to publish, I commit and push.
+**[ON SCREEN]** Tab 2, the `portfolio` folder on GitHub. Click into each folder or file as you name it.
 
-## 5. What was hard (1:35–1:50)
+> This is the code on GitHub. The portfolio is its own app in this folder, separate from the clone.
 
-**[ON SCREEN]** Back to the live site.
+**[ON SCREEN]** Click `app`, then `components`.
 
-> [your words: what was hard about this process. Hint: you built it in about two hours before a hard stop, right after the clone; REFLECTION.md has the 15:25 and 16:05 notes.]
+> `app/page.tsx` stacks the sections in order, and each section is its own file in `components`: the intro, projects, learning, resume, contact and the menu.
+
+**[ON SCREEN]** Go back and click `content`, then `site.json`.
+
+> Every word on the page lives in this one file, so changing the text never means touching the layout. Running locally, there's an edit toggle that saves straight into it.
+
+**[ON SCREEN]** Go back and click **Commits** (or the clock icon) to show the history.
+
+> Every change was its own commit, and Vercel redeployed the site after each push.
 >
 > Thanks for watching. The clone walkthrough is next.
 
@@ -60,16 +62,6 @@ Live: https://bennett-christian-portfolio.vercel.app · Repo: https://github.com
 
 ## Before recording
 
-**Tabs to have open, in order**
-
-1. https://bennett-christian-portfolio.vercel.app on your laptop, scrolled to the top.
-2. The same URL on your phone, or the browser's device mode at 375px.
-3. https://github.com/bennchristian/FC-Bootcamp/commits/main/portfolio
-4. VS Code with `portfolio/app/page.tsx`, `portfolio/app/components/`, `portfolio/app/layout.tsx` and `portfolio/content/site.json`.
-5. A terminal in `portfolio/` running `npm run dev`.
-
-**Check first**
-
-- [ ] The intro is still my plain draft. If you want it in your own words on camera, rewrite it with **Edit text**, then commit `portfolio: intro in my own words` and push before recording.
+- [ ] Open both tabs above, on your laptop, and close anything else.
+- [ ] The intro is still my plain draft. If you want it in your own words on camera, tell me the words first and I'll push them.
 - [ ] Click the LinkedIn link once. It's the only link that couldn't be checked automatically.
-- [ ] Phone number and both emails are on a public page. Keep them only if you're happy for anyone to see them.
