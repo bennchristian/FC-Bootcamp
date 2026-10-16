@@ -40,7 +40,7 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 **Links:**
 - GitHub (public): https://github.com/bennchristian/FC-Bootcamp
 - Portfolio: TODO, once Vercel gives a URL
-- Clone: TODO, once Vercel gives a URL
+- Clone: https://fc-bootcamp.vercel.app (Vercel project `fc-bootcamp`, Root Directory `clone`)
 - Walkthrough video: TODO
 
 ## 2. How to work on it
