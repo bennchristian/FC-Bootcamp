@@ -138,14 +138,42 @@ Whatever a user creates survives a refresh and closing the browser.
 - On the live link, a second account's content appears for that account and persists. It can't edit or delete another account's content, and anything private isn't visible across accounts.
 - This holds for every feature, including FR-14.
 
-### 4.4 Clone: product-specific requirements
+### 4.4 Clone: Cadgy
 
-**TODO(Ben):** fill after FR-5 by running `bmad-prd` with update intent. Product FRs are numbered from FR-17. This section will name:
+Filled on 2026-10-16 from the scope check. Ben chose to write it directly instead of running a full `bmad-prd` update, to save time.
 
-- the product and its purpose in one line
-- the core feature, the create form and the third feature, as FRs
-- the hard part and its substitute (precedent: Justin's YouTube clone embeds YouTube videos instead of hosting uploads)
-- the extra feature for FR-14
+**Product:** a clone of [Cadgy](https://www.onelook.com/cadgy/) by OneLook (Datamuse). It's a daily word-tile puzzle for word-game players: pick one tile per column to spell words, and find every word on the puzzle's list. The footer says it's a bootcamp clone and isn't affiliated with OneLook. Every puzzle is written by Ben or a user, never copied from Cadgy.
+
+**Hard part and substitute:** Cadgy's editors use a dictionary to find every word a grid can make, and publish a new grid at midnight PT. In this clone, the creator types the word list by hand, and the form only checks that each word can be built from the grid. Daily puzzles are keyed to one time zone (UTC+8). Building a word-finding engine and a dictionary would be a project of its own.
+
+**Cut list:** 3D mode, live multiplayer, the printable version, share, Spanish, music, the newsletter, "reveal all words", and editing or deleting a puzzle.
+
+#### FR-17: Play a puzzle (core feature)
+
+A signed-in player opens a puzzle and builds words by picking one tile per column, either by tapping tiles or by typing.
+
+- A word on the puzzle's list scores 10 points and appears under basic or bonus words. Anything else counts as an invalid guess.
+- The clues for bonus words show before those words are found.
+- A tile turns gold once every word that uses it has been found.
+- A timer runs from the player's first visit. Finding every word within 3 minutes, or with no invalid guesses, counts as a win.
+- Progress survives a refresh and closing the browser (FR-10).
+
+#### FR-18: Create a puzzle (create form)
+
+A signed-in player creates a puzzle. They pick the number of columns and the tiles per column (5×4 by default), fill each tile with 0–3 letters (a blank tile shows as ❤️), and list the words. Each word is marked basic or bonus, and every bonus word needs a clue.
+
+- Every word must be buildable from the grid, and the form names any word that isn't.
+- An editor (Ben) can give a puzzle a daily date. The home page shows the newest daily puzzle dated today or earlier. Everyone else's puzzles are community puzzles.
+
+#### FR-19: Leaderboard and puzzle stats (third feature)
+
+Each puzzle shows its players ranked by score and then by time. Above the ranking it shows the average score, the share of players who found every word, and the median time to finish. Guest accounts are left out.
+
+#### FR-20: Archive and personal stats (the FR-14 extra feature)
+
+A player sees every puzzle they've played, with their score and whether they won, plus their totals.
+
+**Demo login pattern (FR-12):** a "Play as guest" button signs the visitor in with a fresh Supabase anonymous account, and a database function gives that account a few past plays. Each visitor starts clean. A puzzle a guest creates is visible only to that guest, and guests never appear on a leaderboard.
 
 ### 4.5 Clone: polish
 
@@ -302,9 +330,11 @@ All times are Ben's local time (UTC+8). The hard stop is **Fri 2026-10-16 17:30*
 | Fri 15:30–16:15 | FR-15, FR-16: link the clone from the portfolio, record the video, check every link, hand off |
 | Fri 16:15–17:30 | Final margin before the hard stop |
 
+**Revised Fri 2026-10-16 12:07 (Ben's decision):** the portfolio hadn't been started. The clone runs first, from about 12:20 to 15:00, and the portfolio gets what's left before 17:30. Cut rule: if the second-account test hasn't passed by 14:45, FR-14 is cut. By 15:15 at the latest, FR-13 shrinks to the phone check.
+
 ## 9. Open questions
 
-1. **Which product is the clone?** Owner: Ben, at FR-5 (Thu around 18:30). This blocks §4.4, FR-6 and `SCHEMA.md`.
+1. ~~Which product is the clone?~~ Resolved 2026-10-16: Cadgy (§4.4).
 
 ## 10. Assumptions index
 

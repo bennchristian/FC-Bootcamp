@@ -20,18 +20,18 @@ Anything below that contradicts them is stale and should be fixed here, not ther
 
 ## 1. What this is
 
-Ben's run through an **accelerated** Frontier Commons Build Bootcamp: four weeks of material in about 36 hours, from Thu 2026-10-15 14:00 to a **Sat 2026-10-17 02:00** deadline. It produces three things:
+Ben's run through an **accelerated** Frontier Commons Build Bootcamp: four weeks of material in about 36 hours, from Thu 2026-10-15 14:00 to a **hard stop at Fri 2026-10-16 17:30** (UTC+8, `PRD.md` §8). It produces three things:
 
 1. **Portfolio**: a live site with who Ben is, what he's made or learning, and how to reach him. Weeks 1–2.
-2. **Clone**: a live, working rebuild of an existing product with at least three features, real data, accounts, and a demo login. Weeks 3–4. Which product is still undecided; it gets picked after the Week 2 three-product breakdown.
-3. **One reflection video** covering the whole bootcamp. Notes are collected as we go in `REFLECTION.md`.
+2. **Clone**: a live, working rebuild of an existing product with at least three features, real data, accounts, and a demo login. Weeks 3–4. The product is OneLook's **Cadgy**, a daily word-tile puzzle (`PRD.md` §4.4).
+3. **One walkthrough video** of about 3 minutes, covering both apps (`PRD.md` FR-15). It replaces the reflection video. Notes are collected as we go in `REFLECTION.md`.
 
 Justin, the bootcamp lead, expects Week 3 (the clone) to be the hardest, so it gets the most time.
 
 **Layout:** one repo with two independent Next.js apps.
 
 - `portfolio/`: not created yet
-- `clone/`: not created yet
+- `clone/`: the Cadgy clone (Next.js App Router + Supabase). Migrations are in `clone/supabase/migrations/`.
 
 Each folder deploys as its own Vercel project, using Vercel's Root Directory setting.
 
@@ -41,7 +41,7 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 - GitHub (public): https://github.com/bennchristian/FC-Bootcamp
 - Portfolio: TODO, once Vercel gives a URL
 - Clone: TODO, once Vercel gives a URL
-- Reflection video: TODO
+- Walkthrough video: TODO
 
 ## 2. How to work on it
 

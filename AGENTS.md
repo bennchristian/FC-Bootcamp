@@ -25,7 +25,7 @@ The usual failure is a brief that assumes the implementer shares this conversati
 
 ## Phase gating
 
-The timeline is compressed: the whole bootcamp runs Thu 2026-10-15 14:00 to **Sat 2026-10-17 02:00**. Phases run in order, and each one ends with something live.
+The timeline is compressed: the whole bootcamp runs Thu 2026-10-15 14:00 to a **hard stop at Fri 2026-10-16 17:30** (`PRD.md` §8). Phases run in order, and each one ends with something live.
 
 1. **Plan.** The eight docs exist. `PRD.md`, `ARCHITECTURE.md` and `DESIGN.md` are filled by their BMAD runs.
 2. **Portfolio live (W1).** `portfolio/` is deployed with three sections (who Ben is, something made or being learned, how to reach him). It gets one change after publishing.
