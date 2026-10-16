@@ -53,7 +53,8 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 
 ## 3. Gotchas that cost real time
 
-None yet.
+- **Next 16 ships with Cache Components on** (`clone/next.config.ts`). Anything per-request (Supabase reads, `cookies()`, route `params`, `Date.now()`) must sit inside `<Suspense>`, and "today" needs `await connection()` first, or dev shows a "blocking-prerender" error. Read `clone/node_modules/next/dist/docs/` before guessing.
+- **Turbopack dev can serve a stale server render** of an edited client component, which shows up as a hydration mismatch. If `curl` of the page doesn't contain the new markup, restart the dev server; the code is fine.
 
 Only observed mistakes belong here: something that actually went wrong, not something that looks like it might.
 
