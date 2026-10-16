@@ -18,7 +18,7 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 
 ## 2. Why Cadgy, and what I cut (0:12–0:45)
 
-**[ON SCREEN]** `PRD.md` in VS Code, scrolled to §4.4 "Clone: Cadgy", with the **Cut list** line visible.
+**[ON SCREEN]** `PRD.md` on GitHub (https://github.com/bennchristian/FC-Bootcamp/blob/main/PRD.md), scrolled to §4.4 "Clone: Cadgy", with the **Cut list** line visible.
 
 > [your words: why you picked Cadgy. REFLECTION.md doesn't record a reason, so give one honest sentence on what drew you to it.]
 >
@@ -30,33 +30,33 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 
 ## 3. The repo (0:45–1:30)
 
-**[ON SCREEN]** VS Code with the `clone/` folder expanded in the sidebar. Open each file as you name it.
+**[ON SCREEN]** The `clone` folder on GitHub (https://github.com/bennchristian/FC-Bootcamp/tree/main/clone). Open each file as you name it; the links are below.
 
 > The repo holds two separate apps, and this is the clone.
 
-**[ON SCREEN]** `clone/app/page.tsx`
+**[ON SCREEN]** `clone/app/page.tsx` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/app/page.tsx)
 
 > The `app` folder holds the pages. This one's the home page.
 
-**[ON SCREEN]** `clone/app/play/[id]/Board.tsx`
+**[ON SCREEN]** `clone/app/play/[id]/Board.tsx` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/app/play/%5Bid%5D/Board.tsx)
 
 > Board is the game. You tap tiles or type, tiles turn gold once no word left needs them, and progress saves after every guess. Leaderboard ranks the players.
 
-**[ON SCREEN]** `clone/app/create/CreateForm.tsx`
+**[ON SCREEN]** `clone/app/create/CreateForm.tsx` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/app/create/CreateForm.tsx)
 
 > This is the create form, and `actions.ts` saves it on the server.
 
-**[ON SCREEN]** `clone/lib/grid.ts`
+**[ON SCREEN]** `clone/lib/grid.ts` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/lib/grid.ts)
 
 > In `lib`, `grid.ts` checks whether a word can be built from a grid. `gemini.ts` calls Gemini, and `lib/supabase` plus `proxy.ts` keep you signed in.
 
-**[ON SCREEN]** `clone/supabase/migrations/0001_tables.sql`
+**[ON SCREEN]** `clone/supabase/migrations/0001_tables.sql` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/supabase/migrations/0001_tables.sql)
 
 > This SQL is the database. There are four tables, and each one has rules for who can read and write it.
 
 ## 4. The hard part (1:30–2:15)
 
-**[ON SCREEN]** The live site at `/create`. Press **✨ Generate puzzle** as you start talking, because it takes 10–15 seconds. When the words fill in, scroll through them. Then switch to `clone/lib/gemini.ts`.
+**[ON SCREEN]** The live site at `/create`. Press **✨ Generate puzzle** as you start talking, because it takes 10–15 seconds. When the words fill in, scroll through them. Then switch to `clone/lib/gemini.ts` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/lib/gemini.ts).
 
 > The hard part is the word list. Cadgy's editors use a dictionary and word-frequency data to find every word a grid can make. That's a project of its own.
 >
@@ -68,7 +68,7 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 
 ## 5. The demo login (2:15–2:45)
 
-**[ON SCREEN]** A private window on https://fc-bootcamp.vercel.app. Click **Play as guest** and show the "Past dailies" scores. Then switch to `clone/supabase/migrations/0002_guest.sql`.
+**[ON SCREEN]** A private window on https://fc-bootcamp.vercel.app. Click **Play as guest** and show the "Past dailies" scores. Then switch to `clone/supabase/migrations/0002_guest.sql` (https://github.com/bennchristian/FC-Bootcamp/blob/main/clone/supabase/migrations/0002_guest.sql).
 
 > To try it, click "Play as guest". Every click makes a brand-new anonymous account, and a database function gives it a couple of past games, so it's never empty.
 >
@@ -89,7 +89,7 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 **Tabs to have open, in order**
 
 1. https://fc-bootcamp.vercel.app, in a normal window where you're signed in.
-2. VS Code with these files in tabs: `PRD.md` (at §4.4), `clone/app/page.tsx`, `clone/app/play/[id]/Board.tsx`, `clone/app/create/CreateForm.tsx`, `clone/lib/grid.ts`, `clone/lib/gemini.ts`, `clone/supabase/migrations/0001_tables.sql`, `clone/supabase/migrations/0002_guest.sql`.
+2. GitHub tabs for each file in sections 2–5, using the links in the [ON SCREEN] cues.
 3. https://fc-bootcamp.vercel.app/create
 4. A private window on https://fc-bootcamp.vercel.app, not signed in yet.
 5. https://github.com/bennchristian/FC-Bootcamp
@@ -101,9 +101,7 @@ Live: https://fc-bootcamp.vercel.app · Repo: https://github.com/bennchristian/F
 - [ ] On `/create`, press **✨ Generate puzzle** once. If it says "Gemini is busy", wait a minute and try again, so it works on camera.
 - [ ] Don't press **Create puzzle** on camera from your own account, or the puzzle goes up publicly under your name. From the guest window, it stays visible only to that guest.
 
-**Still to do (yours)**
-
-- [ ] **Give the guest demo some history.** On the live site (checked 2026-10-16), the only daily is dated 2026-10-16, and there's no "Past dailies" section. `seed_guest()` only seeds dailies dated before today (`clone/supabase/migrations/0002_guest.sql:33`), so a guest gets no history, which breaks the "never empty" line in section 5. To fix it, sign in as yourself on `/create`, press **✨ Generate puzzle**, set **Daily date** to 2026-10-15, and press **Create puzzle**. Do it again for 2026-10-14, then repeat the private-window test.
+**Done:** the past-dated dailies (2026-10-15 and 2026-10-14) are live, so a guest now gets history.
 
 **Fixed on 2026-10-16** (the create form fix is pushed in `ff33f42`; the rest aren't committed yet)
 

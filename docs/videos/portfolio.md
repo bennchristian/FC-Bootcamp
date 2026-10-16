@@ -22,7 +22,9 @@ Live: https://bennett-christian-portfolio.vercel.app · Repo: https://github.com
 
 > Up top is a short intro and a photo. Under "What I'm making" there's the Cadgy clone, with links to play it and read the code. Then two side projects I built with AI: a finance tracker that reads my bank alert emails and sorts them automatically, and a fitness app that interviews you and builds a personal plan. Last is the repo for this whole bootcamp.
 >
-> "What I'm learning" is a log from my notes this week: scoping before code, taking a product apart, and row-level security. Contact has email, phone, LinkedIn and GitHub.
+> "What I'm learning" is a log from my notes this week: scoping before code, taking a product apart, and row-level security. Contact has email, phone, LinkedIn, GitHub, and a Buy Me a Coffee link.
+>
+> My resume opens right on the page so you can scroll through it, and the button at the top right downloads the PDF.
 >
 > On a phone, the links fold into a menu, and nothing scrolls sideways.
 
@@ -30,7 +32,7 @@ Live: https://bennett-christian-portfolio.vercel.app · Repo: https://github.com
 
 **[ON SCREEN]** GitHub, the portfolio's commit history: https://github.com/bennchristian/FC-Bootcamp/commits/main/portfolio
 
-> It went live first with three plain sections, then I fixed the tab title. After that, every change was its own commit, and Vercel redeployed after each push: project write-ups with real links, the learning section, the phone layout and menu, the photo, the extra contact details, and my two side projects.
+> It went live first with three plain sections, then I fixed the tab title. After that, every change was its own commit, and Vercel redeployed after each push: project write-ups with real links, the learning section, the phone layout and menu, the photo, the extra contact details, my two side projects, and the resume.
 >
 > [your words: which change made the biggest difference. Hint: compare the first commit with now; the project links and the photo are the biggest visual jumps.]
 
