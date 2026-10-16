@@ -1,9 +1,16 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import type { PuzzleWord } from "@/lib/grid";
-import { MAX_COLUMNS, MAX_ROWS, MIN_COLUMNS, MIN_ROWS, validatePuzzle } from "@/lib/puzzle";
-import { type CreateState, createPuzzle } from "./actions";
+import {
+  MAX_COLUMNS,
+  MAX_ROWS,
+  MIN_COLUMNS,
+  MIN_ROWS,
+  validateGrid,
+  validatePuzzle,
+} from "@/lib/puzzle";
+import { type CreateState, createPuzzle, suggestWords } from "./actions";
 
 const input = "rounded-md border border-neutral-600 bg-neutral-900 px-3 py-2";
 
@@ -24,6 +31,8 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
   const [state, formAction, pending] = useActionState<CreateState, FormData>(createPuzzle, {
     message: "",
   });
+  const [filling, startFilling] = useTransition();
+  const [fillMessage, setFillMessage] = useState("");
 
   const cols = tiles.length;
   const rows = tiles[0].length;
@@ -33,6 +42,19 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
   function setTile(col: number, row: number, value: string) {
     const letters = value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
     setTiles(tiles.map((column, c) => column.map((tile, r) => (c === col && r === row ? letters : tile))));
+  }
+
+  function autoFill() {
+    setFillMessage("");
+    startFilling(async () => {
+      const result = await suggestWords(tiles);
+      if ("message" in result) {
+        setFillMessage(result.message);
+      } else {
+        setWords(result.words);
+        setFillMessage(`Found ${result.words.length} words. Check them before you save.`);
+      }
+    });
   }
 
   function setWord(index: number, change: Partial<PuzzleWord>) {
@@ -125,11 +147,26 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="font-semibold">Words</h2>
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="font-semibold">Words</h2>
+          <button
+            type="button"
+            onClick={autoFill}
+            disabled={filling || validateGrid(tiles) !== null}
+            className="rounded-md border border-amber-400 px-3 py-1.5 text-sm font-semibold text-amber-400 hover:bg-amber-400 hover:text-neutral-900 disabled:opacity-50"
+          >
+            {filling ? "Finding words…" : "✨ Auto-fill words"}
+          </button>
+        </div>
         <p className="text-sm text-neutral-500">
-          List every word the grid makes. Bonus words need a clue, which players see before they
-          find the word.
+          Auto-fill asks Gemini for the 20 most common words the grid makes: the top 10 become basic
+          words and the next 10 bonus words with a clue. You can also list or edit words by hand.
         </p>
+        {fillMessage && (
+          <p className="text-sm text-neutral-300" aria-live="polite">
+            {fillMessage}
+          </p>
+        )}
         {words.map((w, i) => (
           <div key={i} className="flex flex-col gap-2 rounded-lg border border-neutral-700 p-3">
             <div className="flex gap-2">
