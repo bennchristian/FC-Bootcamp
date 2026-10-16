@@ -40,6 +40,28 @@
         ]
       },
       {
+        "name": "Personal finance tracker",
+        "stack": "Google Apps Script · Gemini · Claude Code",
+        "summary": "Tracking money by hand was cumbersome, and the apps I tried cost money without doing what I wanted. Bank alert emails from UOB, PayLah, ShopBack, Grab and others are parsed and categorised automatically into a review tab. Once ticked, they flow into income or expenses and a monthly summary. Cash receipts can be sent in as photos.",
+        "links": [
+          {
+            "label": "Template",
+            "href": "https://docs.google.com/spreadsheets/d/1pvpQ2hZI8-EOtdnGACqKaH7XNSf0u-dgiGXlc0Hm0z8/edit?gid=1896103116#gid=1896103116"
+          }
+        ]
+      },
+      {
+        "name": "Tailored fitness app",
+        "stack": "Claude Code",
+        "summary": "For beginners, or people getting back into fitness, who find tutorials and existing apps too impersonal. A chatbot asks questions that build on each other: your health, history, goals, experience and habits. It then produces a personal site with a phased plan, a workout calendar and a log that you can edit.",
+        "links": [
+          {
+            "label": "See my example",
+            "href": "https://final-65-55.netlify.app/"
+          }
+        ]
+      },
+      {
         "name": "FC-Bootcamp",
         "stack": "Claude Code · GitHub · Vercel",
         "summary": "The repo for my run through the Frontier Commons Build Bootcamp: four weeks of material in about 36 hours. It holds this site, the clone, and the PRD and planning docs that scoped them.",
