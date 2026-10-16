@@ -76,7 +76,8 @@ Unique on (`user_id`, `puzzle_id`): one play per player per puzzle.
 
 | What | Where | Notes |
 |---|---|---|
-| Supabase URL and publishable key | `clone/.env.local` (gitignored) **and** the clone's Vercel env vars | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Ben enters them in both places. No secret key is used anywhere. |
+| Gemini API key | `clone/.env.local` **and** Vercel env vars, server-only | `GEMINI_API_KEY`, plus optional `GEMINI_MODEL`. Only the create form's auto-fill uses it (`lib/gemini.ts`). Ben enters it in both places. |
+| Supabase URL and publishable key | `clone/.env.local` (gitignored) **and** the clone's Vercel env vars | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Ben enters them in both places. No Supabase secret key is used anywhere. |
 | Vercel projects | Two projects from this repo, with Root Directory `portfolio` and Root Directory `clone` | The URLs are recorded in `CLAUDE.md` §1 |
 | Supabase Auth settings | Dashboard → Authentication | **Confirm email: off** (FR-8). **Allow anonymous sign-ins: on**, from FR-12. |
 | Editor flag | `profiles.is_editor` on Ben's own row | Set by hand in the Table Editor, which bypasses RLS |

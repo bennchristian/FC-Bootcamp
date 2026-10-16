@@ -144,9 +144,11 @@ Filled on 2026-10-16 from the scope check. Ben chose to write it directly instea
 
 **Product:** a clone of [Cadgy](https://www.onelook.com/cadgy/) by OneLook (Datamuse). It's a daily word-tile puzzle for word-game players: pick one tile per column to spell words, and find every word on the puzzle's list. The footer says it's a bootcamp clone and isn't affiliated with OneLook. Every puzzle is written by Ben or a user, never copied from Cadgy.
 
-**Hard part and substitute:** Cadgy's editors use a dictionary to find every word a grid can make, and publish a new grid at midnight PT. In this clone, the creator types the word list by hand, and the form only checks that each word can be built from the grid. Daily puzzles are keyed to one time zone (UTC+8). Building a word-finding engine and a dictionary would be a project of its own.
+**Hard part and substitute:** Cadgy's editors use a dictionary and word-frequency data to find every word a grid can make, and publish a new grid at midnight PT. In this clone, the create form lists every letter string the grid can spell and asks Gemini (free tier) to pick the 20 most common real words, with clues for words 11–20. The creator reviews the list and can edit it or type it by hand, and the form checks that each word can be built from the grid. Daily puzzles are keyed to one time zone (UTC+8). Building a dictionary and frequency ranking would be a project of its own. Ben changed this on 2026-10-16 after finding that hand-typed lists missed common words.
 
-**Cut list:** 3D mode, live multiplayer, the printable version, share, Spanish, music, the newsletter, "reveal all words", and editing or deleting a puzzle.
+**Eventual goal (not in this run):** generate each daily puzzle automatically, grid and word list included, so a new one appears every day without an editor checking it.
+
+**Cut list:** live multiplayer, the printable version, share, Spanish, music, the newsletter, "reveal all words", and editing or deleting a puzzle.
 
 #### FR-17: Play a puzzle (core feature)
 
@@ -154,7 +156,8 @@ A signed-in player opens a puzzle and builds words by picking one tile per colum
 
 - A word on the puzzle's list scores 10 points and appears under basic or bonus words. Anything else counts as an invalid guess.
 - The clues for bonus words show before those words are found.
-- A tile turns gold once every word that uses it has been found.
+- A tile turns gold once no unfound word uses it.
+- A 3D toggle stacks each tile one layer per unfound word that still uses it. Ben brought it back from the cut list on 2026-10-16.
 - A timer runs from the player's first visit. Finding every word within 3 minutes, or with no invalid guesses, counts as a win.
 - Progress survives a refresh and closing the browser (FR-10).
 
@@ -163,6 +166,7 @@ A signed-in player opens a puzzle and builds words by picking one tile per colum
 A signed-in player creates a puzzle. They pick the number of columns and the tiles per column (5×4 by default), fill each tile with 0–3 letters (a blank tile shows as ❤️), and list the words. Each word is marked basic or bonus, and every bonus word needs a clue.
 
 - Every word must be buildable from the grid, and the form names any word that isn't.
+- An "Auto-fill words" button fills in the 20 most common words via Gemini: the top 10 as basic words and 11–20 as bonus words with clues. The creator can edit them before saving.
 - An editor (Ben) can give a puzzle a daily date. The home page shows the newest daily puzzle dated today or earlier. Everyone else's puzzles are community puzzles.
 
 #### FR-19: Leaderboard and puzzle stats (third feature)
