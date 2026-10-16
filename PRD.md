@@ -21,7 +21,7 @@ It builds on Justin's brief to the fellows, the course docs in `docs/bootcamp/` 
 
 Ben is a fellow in the Frontier Commons fellowship. After Gloo, Justin is putting the fellows through an accelerated version of the Build Bootcamp to build technical skill and sharpen product sense. The course is four weeks of material that fellows condense into about two days and roughly 10 hours of work, because they already know much of it.
 
-The run produces three things for Justin: a live **portfolio**, a live working **clone** of an existing product, and a **walkthrough video** of about three minutes that takes him through both. Everything is built on Path B: Claude Code, GitHub and Vercel, plus Supabase for the clone.
+The run produces three things for Justin: a live **portfolio**, a live working **clone** of an existing product, and two **walkthrough videos**: one of 2–3 minutes on the clone repo and one of 1–2 minutes on the portfolio. Everything is built on Path B: Claude Code, GitHub and Vercel, plus Supabase for the clone.
 
 Done well means that by Fri 2026-10-16 17:30, Justin can see two things in a few minutes. First, that Ben can take a product from breakdown to a working, deployed clone. Second, how Ben thinks about scope, through the product breakdown and scope check he receives. The clone matches Justin's own YouTube clone (real accounts, persisted data, three or more working features) and adds a one-button demo login, which only one of the three reference clones has.
 
@@ -41,7 +41,7 @@ Recruiters, clients and real end users of the clone. The portfolio is public but
 - **UJ-1. Justin reads the portfolio.** On a laptop or phone, he sees who Ben is and something he's made or is learning, and finds how to reach him.
 - **UJ-2. Justin tries the clone.** He clicks the demo login, lands in an account that already has content, and uses the core feature, the create form and the third feature, without signing up.
 - **UJ-3. Ben's second account uses the clone.** In a different browser, Ben signs up as someone else and creates things. Those things persist and are his, and he can't change what another account made.
-- **UJ-4. Justin watches the walkthrough.** He watches about three minutes covering the portfolio, the repo, why Ben picked this product, and the hard part that was faked.
+- **UJ-4. Justin watches the walkthroughs.** He watches two short videos: the portfolio (1–2 min), and the clone repo (2–3 min) with why Ben picked this product and the hard part that was faked.
 
 ## 3. Glossary
 
@@ -58,7 +58,7 @@ Recruiters, clients and real end users of the clone. The portfolio is public but
 - **Demo login**: one button on the clone that signs a visitor into a demo account with content already in it, with no sign-up.
 - **Second-account test**: UJ-3, run on the live link.
 - **Cut list**: features left out of the first clone build, from the scope check and the breakdown's skip list.
-- **Walkthrough video**: the recording of about three minutes for Justin (FR-15).
+- **Walkthrough videos**: the two recordings for Justin (FR-15), one on the clone repo (2–3 min) and one on the portfolio (1–2 min).
 - **Hand-off**: sending Justin everything in FR-16.
 
 ## 4. Features
@@ -72,7 +72,7 @@ Realizes UJ-1.
 Ben can share a live link to the portfolio, which has three sections: who Ben is, something he's made or is learning, and how to reach him.
 
 - The first deploy is a manual Vercel dashboard import (Week 1).
-- The contact section has at least one working contact method. `[ASSUMPTION: email, plus LinkedIn or GitHub, as in the references]`
+- The contact section has at least one working contact method. Ben chose work email, personal email, LinkedIn and GitHub (2026-10-16).
 
 #### FR-2: One change after publishing
 
@@ -213,14 +213,18 @@ A user can use one more feature from the cut list. It passes the second-account 
 
 Realizes UJ-4.
 
-#### FR-15: Walkthrough video
+#### FR-15: Walkthrough videos
 
-Ben records and narrates a 2:30–3:30 video for Justin. Claude can supply a checklist of what to cover, but not a script. The video covers:
+Changed on 2026-10-16 by Justin's new brief: two videos instead of one. Ben records and narrates both. Claude drafts a script for each from facts in the repo, leaving slots for Ben's own opinions, and Ben edits it before recording (Ben's decision, replacing "checklist, not a script").
 
-- the portfolio
+**Clone repo walkthrough (2–3 min):**
 - the repo: what the main folders and files are for
 - about 30 seconds on why this product and what was scoped out
 - the hard part, what replaced it, and why
+
+**Portfolio walkthrough (1–2 min):**
+- the live portfolio, on a laptop and a phone
+- its sections, and the changes made after publishing
 
 Justin can watch it without signing in. `[ASSUMPTION: unlisted YouTube or Loom]`
 
@@ -233,7 +237,7 @@ By Fri 2026-10-16 17:30, Justin receives:
 - the product breakdown link
 - the scope check link
 - the demo login instructions
-- the walkthrough video link
+- both walkthrough video links
 
 `[ASSUMPTION: sent through the fellowship Space]`
 
@@ -253,7 +257,7 @@ Before sending:
 
 - The Week 4 Claude-artifact prototypes.
 - The Week 2 deliberate broken deploy and revert.
-- A reflection video. It's deferred because it belongs to the Gloo Hackathon, and the walkthrough video is the only video. `[ASSUMPTION: Justin accepts the walkthrough video in place of the reflection video he asked for]` Adding notes to `REFLECTION.md` is optional.
+- A reflection video. It's deferred because it belongs to the Gloo Hackathon, and the two walkthrough videos (FR-15) are the only videos. `[ASSUMPTION: Justin accepts the walkthrough video in place of the reflection video he asked for]` Adding notes to `REFLECTION.md` is optional.
 - Lovable or Path A.
 - Libraries beyond Next.js, Supabase, Vercel and what `create-next-app` ships with.
 - A YouTube clone.
@@ -338,6 +342,8 @@ All times are Ben's local time (UTC+8). The hard stop is **Fri 2026-10-16 17:30*
 
 **Revised Fri 2026-10-16 12:07 (Ben's decision):** the portfolio hadn't been started. The clone runs first, from about 12:20 to 15:00, and the portfolio gets what's left before 17:30. Cut rule: if the second-account test hasn't passed by 14:45, FR-14 is cut. By 15:15 at the latest, FR-13 shrinks to the phone check.
 
+**Revised Fri 2026-10-16 15:15 (Ben's decision):** the portfolio runs from about 15:25 to 17:00, covering FR-1 to FR-3 and both video scripts, and Ben records the two videos after 17:00. If change 5 of FR-3 hasn't started by 16:40, it shrinks to "no sideways scroll at 375px".
+
 ## 9. Open questions
 
 1. ~~Which product is the clone?~~ Resolved 2026-10-16: Cadgy (§4.4).
@@ -346,7 +352,6 @@ All times are Ben's local time (UTC+8). The hard stop is **Fri 2026-10-16 17:30*
 
 Non-blocking. Ben confirms or corrects them by approving this PRD.
 
-- FR-1: the contact methods are email plus LinkedIn or GitHub.
 - FR-4: the breakdown goes in a copy of the course's Google Doc template.
 - FR-6: the three or four tables include `profiles`.
 - FR-6: the scope check uses the course's Google Doc template.

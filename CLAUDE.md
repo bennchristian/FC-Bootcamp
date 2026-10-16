@@ -24,13 +24,13 @@ Ben's run through an **accelerated** Frontier Commons Build Bootcamp: four weeks
 
 1. **Portfolio**: a live site with who Ben is, what he's made or learning, and how to reach him. Weeks 1–2.
 2. **Clone**: a live, working rebuild of an existing product with at least three features, real data, accounts, and a demo login. Weeks 3–4. The product is OneLook's **Cadgy**, a daily word-tile puzzle (`PRD.md` §4.4).
-3. **One walkthrough video** of about 3 minutes, covering both apps (`PRD.md` FR-15). It replaces the reflection video. Notes are collected as we go in `REFLECTION.md`.
+3. **Two walkthrough videos** (`PRD.md` FR-15, from Justin's new brief): the clone repo (2–3 min) and the portfolio (1–2 min). They replace the reflection video. Claude drafts the scripts in `docs/videos/`, and Ben edits and records them.
 
 Justin, the bootcamp lead, expects Week 3 (the clone) to be the hardest, so it gets the most time.
 
 **Layout:** one repo with two independent Next.js apps.
 
-- `portfolio/`: not created yet
+- `portfolio/`: Bennett's portfolio (Next.js App Router, static, no backend). A light editorial look with Newsreader headings and Geist body text.
 - `clone/`: the Cadgy clone (Next.js App Router + Supabase). Migrations are in `clone/supabase/migrations/`.
 
 Each folder deploys as its own Vercel project, using Vercel's Root Directory setting.
@@ -41,7 +41,7 @@ Each folder deploys as its own Vercel project, using Vercel's Root Directory set
 - GitHub (public): https://github.com/bennchristian/FC-Bootcamp
 - Portfolio: TODO, once Vercel gives a URL
 - Clone: https://fc-bootcamp.vercel.app (Vercel project `fc-bootcamp`, Root Directory `clone`)
-- Walkthrough video: TODO
+- Walkthrough videos (clone, portfolio): TODO, recorded after 17:00 Fri
 
 ## 2. How to work on it
 

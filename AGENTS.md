@@ -4,7 +4,7 @@
 
 | Role | Who | Does | Never does |
 |---|---|---|---|
-| Owner | Ben | Decides scope and picks the clone. Approves each phase gate. Does the dashboard steps: GitHub repo, Vercel import, Supabase project, keys, env vars. Runs the second-account test. Records the reflection video and posts in the Space. | — |
+| Owner | Ben | Decides scope and picks the clone. Approves each phase gate. Does the dashboard steps: GitHub repo, Vercel import, Supabase project, keys, env vars. Runs the second-account test. Records the two walkthrough videos and posts in the Space. | — |
 | Bootcamp lead | Justin | Sets the deliverables and reviews what's posted in the Space | — |
 | AI agent (Claude Code) | — | Scaffolds and implements **one change at a time** against `PRD.md` and `RULES.md`. Explains any file it creates in plain words when asked. Logs reflection-worthy moments in `REFLECTION.md`. | Widens scope, adds a library outside the stack, commits or pushes without being asked, enters keys or passwords into any dashboard, records or scripts Ben's reflection in Ben's voice |
 
@@ -37,7 +37,7 @@ The timeline is compressed: the whole bootcamp runs Thu 2026-10-15 14:00 to a **
    - The scope check is filled in first.
    - Then the 8-step build order: scaffold, tables, core feature, accounts, create form, third feature, redeploy after each step, second-account test.
 5. **Clone polished (W4).** Fix anything half-working, add a demo login, one more feature, and a UI pass on laptop and phone.
-6. **Ship.** Record the reflection video. Post the portfolio URL, clone URL, demo login instructions and the video in the Space.
+6. **Ship.** Record the two walkthrough videos (the clone repo, 2–3 min, and the portfolio, 1–2 min) from Claude's draft scripts. Post the portfolio URL, clone URL, demo login instructions and both videos in the Space.
 
 The agent doesn't move work to the next phase on its own. Ben confirms each gate.
 
