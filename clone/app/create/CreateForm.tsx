@@ -47,7 +47,13 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
   function autoFill() {
     setFillMessage("");
     startFilling(async () => {
-      const result = await suggestWords(tiles);
+      let result;
+      try {
+        result = await suggestWords(tiles);
+      } catch {
+        setFillMessage("Auto-fill didn't respond. Try again, or list the words by hand.");
+        return;
+      }
       if ("message" in result) {
         setFillMessage(result.message);
       } else {

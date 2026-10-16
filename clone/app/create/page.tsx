@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { getCurrentPlayer } from "@/lib/player";
 import CreateForm from "./CreateForm";
 
+// Server actions on this page include the Gemini auto-fill call, so allow it up to 60s.
+export const maxDuration = 60;
+
 export default function CreatePage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8">
