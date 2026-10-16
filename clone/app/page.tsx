@@ -54,7 +54,12 @@ async function PuzzleLists() {
       </section>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Community puzzles</h2>
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-lg font-semibold">Community puzzles</h2>
+          <Link href="/create" className="text-sm text-amber-400 hover:text-amber-300">
+            Make your own →
+          </Link>
+        </div>
         {community && community.length > 0 ? (
           <ul className="flex flex-col gap-2">
             {community.map((puzzle) => (
@@ -72,7 +77,7 @@ async function PuzzleLists() {
             ))}
           </ul>
         ) : (
-          <p className="text-neutral-400">No community puzzles yet.</p>
+          <p className="text-neutral-400">No community puzzles yet. Be the first to make one.</p>
         )}
       </section>
     </>
