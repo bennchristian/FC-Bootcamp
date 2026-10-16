@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import GuestButton from "@/app/GuestButton";
 import { todayUtc8 } from "@/lib/daily";
+import { getCurrentPlayer } from "@/lib/player";
 import { createClient } from "@/lib/supabase/server";
 
 export default function Home() {
@@ -23,7 +25,8 @@ export default function Home() {
 async function PuzzleLists() {
   await connection(); // "today" changes over time, so render per request
   const supabase = await createClient();
-  const [{ data: daily }, { data: community }] = await Promise.all([
+  const [player, { data: daily }, { data: community }] = await Promise.all([
+    getCurrentPlayer(),
     supabase
       .from("puzzles")
       .select("id, title, daily_date")
@@ -51,6 +54,7 @@ async function PuzzleLists() {
         ) : (
           <p className="text-neutral-400">No daily puzzle yet. Check back soon.</p>
         )}
+        {!player && <GuestButton />}
       </section>
 
       <section className="flex flex-col gap-3">

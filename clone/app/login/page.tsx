@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import GuestButton from "@/app/GuestButton";
 import LoginForm from "./LoginForm";
 
 export default function LoginPage() {
@@ -11,6 +12,10 @@ export default function LoginPage() {
       <Suspense>
         <LoginForm />
       </Suspense>
+      <div className="flex flex-col items-center gap-2 border-t border-neutral-800 pt-6">
+        <p className="text-sm text-neutral-400">Just looking? No sign-up needed.</p>
+        <GuestButton />
+      </div>
     </main>
   );
 }

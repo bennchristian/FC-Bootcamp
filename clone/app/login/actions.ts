@@ -51,3 +51,13 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect("/");
 }
+
+// The demo login (FR-12): a fresh anonymous account per click, with some sample history.
+export async function playAsGuest(_prev: AuthState, formData: FormData): Promise<AuthState> {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInAnonymously();
+  if (error) return { message: `Couldn't start a guest game: ${error.message}` };
+
+  await supabase.rpc("seed_guest"); // sample history is a nice-to-have; play works without it
+  redirect(safeNext(formData.get("next")));
+}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { Columns, PuzzleWord } from "@/lib/grid";
+import GuestButton from "@/app/GuestButton";
 import { getCurrentPlayer } from "@/lib/player";
 import { createClient } from "@/lib/supabase/server";
 import Board from "./Board";
@@ -33,6 +34,7 @@ async function PuzzleLoader({ params }: { params: Promise<{ id: string }> }) {
         >
           Sign in to play
         </Link>
+        <GuestButton next={`/play/${id}`} />
       </div>
     );
   }
