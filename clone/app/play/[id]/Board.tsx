@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 const WIN_SECONDS = 180;
 const MAX_LAYERS = 6; // 3D stacks taller than this show a count instead
 const LAYER_PX = 4;
+const FLASH_MS = 2000;
 
 // Only called from event handlers and timers, never while rendering.
 const clock = () => Date.now();
@@ -34,6 +35,9 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const [found, setFound] = useState<string[]>(saved?.found ?? []);
   const [invalidCount, setInvalidCount] = useState(saved?.invalidCount ?? 0);
   const [message, setMessage] = useState("");
+  // The word just found, shown big in the middle of the screen for FLASH_MS. `at` restarts the
+  // animation when two words are found back to back.
+  const [flash, setFlash] = useState<{ word: string; clue: string | null; at: number } | null>(null);
   const [saveError, setSaveError] = useState("");
   const [startedAt, setStartedAt] = useState<number | null>(saved?.startedAt ?? null);
   const [finishedAt, setFinishedAt] = useState<number | null>(saved?.finishedAt ?? null);
@@ -45,7 +49,7 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
   const gridRef = useRef<HTMLDivElement>(null);
   const [link, setLink] = useState<string>("");
 
-  const answers = useMemo(() => new Set(words.map((w) => w.word)), [words]);
+  const answers = useMemo(() => new Map(words.map((w) => [w.word, w])), [words]);
   const allFound = words.length > 0 && found.length === words.length;
 
   // Which words use each tile, keyed "column-row".
@@ -89,6 +93,12 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
         );
     });
   }, [saved, supabase, userId, puzzleId]);
+
+  useEffect(() => {
+    if (!flash) return;
+    const id = setTimeout(() => setFlash(null), FLASH_MS);
+    return () => clearTimeout(id);
+  }, [flash]);
 
   const end = finishedAt ?? now;
   // How many unfound words still use each tile. At 0 the tile turns gold; in 3D it's the stack height.
@@ -137,6 +147,8 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
       setFound(nextFound);
       setFinishedAt(nextFinished);
       setMessage(`${word}: +${POINTS_PER_WORD}`);
+      const { kind, clue } = answers.get(word)!;
+      setFlash({ word, clue: kind === "bonus" ? clue : null, at: clock() });
       save({ found: nextFound, invalidCount, finishedAt: nextFinished });
     } else {
       setInvalidCount(invalidCount + 1);
@@ -302,6 +314,20 @@ export default function Board({ puzzleId, userId, columns, words, saved }: Props
           </p>
         )}
       </div>
+
+      {flash && (
+        <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            key={flash.at}
+            className="word-flash rounded-xl bg-orange-500 px-4 py-3 text-center text-white shadow-2xl"
+            // As wide as the board: 3.5rem tiles with 0.5rem gaps.
+            style={{ width: `min(${columns.length * 4 - 0.5}rem, 100%)` }}
+          >
+            <p className="text-3xl font-bold tracking-widest">{flash.word}</p>
+            {flash.clue && <p className="mt-1 text-sm text-orange-50">{flash.clue}</p>}
+          </div>
+        </div>
+      )}
 
       {allFound && (
         <p className="rounded-lg bg-amber-400 px-4 py-2 font-semibold text-neutral-900">
