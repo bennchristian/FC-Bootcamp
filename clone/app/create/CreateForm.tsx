@@ -38,7 +38,10 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
 
   const cols = tiles.length;
   const rows = tiles[0].length;
-  const filledWords = words.filter((w) => w.word.trim() !== "");
+  // Words as they'll be saved: trimmed and uppercase, so "Color" passes the A–Z check.
+  const filledWords = words
+    .map((w) => ({ ...w, word: w.word.trim().toUpperCase() }))
+    .filter((w) => w.word !== "");
   const problem = validatePuzzle(tiles, filledWords);
   // A fresh form has no words yet; that's not worth a red error before the creator starts.
   const shownProblem = filledWords.length > 0 ? problem : null;
@@ -98,7 +101,7 @@ export default function CreateForm({ isEditor }: { isEditor: boolean }) {
     dailyDate: isEditor ? dailyDate : "",
     columns: tiles,
     words: filledWords.map((w) => ({
-      word: w.word.trim().toUpperCase(),
+      word: w.word,
       kind: w.kind,
       clue: w.kind === "bonus" ? w.clue : null,
     })),
