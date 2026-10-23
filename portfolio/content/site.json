@@ -44,6 +44,21 @@
         ]
       },
       {
+        "name": "KNOWN",
+        "stack": "Gloo AI Hackathon · Frontier Commons team",
+        "summary": "A private, in-the-moment Scripture experience for someone carrying something hard far from home, like an international student facing loneliness or grief. She names what she's carrying in pictures or her own words, meets someone in Scripture who carried something similar, reads their words, and chooses a gentle response: pray, sit with it, reflect, or reach out. Built with the Frontier Commons team for Track 2, Scripture Beyond the App, in five languages, with no account and nothing saved unless she chooses to share.",
+        "links": [
+          {
+            "label": "Try it",
+            "href": "https://known-prototype-sigma.vercel.app/#clean"
+          },
+          {
+            "label": "Code",
+            "href": "https://github.com/bennchristian/FC-Lament"
+          }
+        ]
+      },
+      {
         "name": "Personal finance tracker",
         "stack": "Google Apps Script · Gemini · Claude Code",
         "summary": "Tracking money by hand was cumbersome, and the apps I tried cost money without doing what I wanted. Bank alert emails from UOB, PayLah, ShopBack, Grab and others are parsed and categorised automatically into a review tab. Once ticked, they flow into income or expenses and a monthly summary. Cash receipts can be sent in as photos.",
