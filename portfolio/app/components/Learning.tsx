@@ -11,7 +11,7 @@ export default function Learning() {
       </h2>
       <ol className="mt-8 space-y-6">
         {entries.map((entry, i) => (
-          <li key={i} className="grid gap-1 sm:grid-cols-[5rem_1fr] sm:gap-6">
+          <li key={i} className="grid gap-1 sm:grid-cols-[8rem_1fr] sm:gap-6">
             <span className="text-xs uppercase tracking-widest text-muted sm:pt-1.5">
               <Editable path={`learning.entries.${i}.date`} text={entry.date} />
             </span>
