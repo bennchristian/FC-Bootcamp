@@ -66,6 +66,22 @@
         ]
       },
       {
+        "name": "Of Good Heart",
+        "stack": "Google Sheets · Claude Code · Instagram",
+        "summary": "A creative ecommerce brand named after the Chinese saying 世上无难事，只怕有心人: nothing is difficult if you put your heart into it. It makes encouraging digital and physical products, with Instagram stories as its main funnel. I built its production schedule and a P&L model, and it's where I'm growing as an entrepreneur.",
+        "note": "Side note: I'm working on scaling its content production system into a business venture with my partner.",
+        "links": [
+          {
+            "label": "Pitch deck",
+            "href": "https://canva.link/eqj30dfauarcfxw"
+          },
+          {
+            "label": "Instagram",
+            "href": "https://www.instagram.com/of.goodheart"
+          }
+        ]
+      },
+      {
         "name": "FC-Bootcamp",
         "stack": "Claude Code · GitHub · Vercel",
         "summary": "The repo for my run through the Frontier Commons Build Bootcamp: four weeks of material in about 36 hours. It holds this site, the clone, and the PRD and planning docs that scoped them.",

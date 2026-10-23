@@ -27,6 +27,11 @@ export default function Projects() {
                 text={project.summary}
               />
             </p>
+            {"note" in project && project.note && (
+              <p className="mt-3 border-l-2 border-accent pl-3 text-sm italic leading-relaxed text-muted">
+                <Editable path={`projects.items.${i}.note`} text={project.note} />
+              </p>
+            )}
             <p className="mt-3 flex gap-5">
               {project.links.map((link, j) => (
                 <a
